@@ -11,23 +11,7 @@ import javafx.scene.layout.Pane;
  */
 public class Pawn extends Piece {
     
-
     
-    @Override
-    public Pane getImage(String color) {
-        Pane frame = new Pane();
-        
-        if (color.equals("WHITE")) {
-            Image imageFile = new Image("file:src/main/java/chessPieces/pieceImages/whitePawn.png");
-            ImageView image = new ImageView(imageFile);
-            frame.getChildren().add(image);
-        } else if (color.equals("BLACK")) {
-            Image imageFile = new Image("file:src/main/java/chessPieces/pieceImages/blackPawn.png");
-            ImageView image = new ImageView(imageFile);
-            frame.getChildren().add(image);
-        }
-        return frame;
-    }
     
     @Override
     public ImageView getImageView(String color) {
@@ -42,5 +26,7 @@ public class Pawn extends Piece {
         }
         return image;
     }
+    
+    
     
 }

@@ -11,6 +11,22 @@ import javafx.scene.layout.Pane;
  */
 public class Bishop extends Piece {
     
+    public int topLeftTiles(int column, int row) {
+        return Math.min(row, column) - 1;
+    }
+    
+    public int bottomLeftTiles(int column, int row) {
+        return 8 - Math.max(row, 9 - column);
+    }
+    
+    public int topRightTiles(int column, int row) {
+        return Math.min(row, 9 - column) - 1;
+    }
+    
+    public int bottomRightTiles(int column, int row) {
+        return 8 - Math.max(row, column);
+    }
+    
     @Override
     public Pane getImage(String color) {
         Pane frame = new Pane();
