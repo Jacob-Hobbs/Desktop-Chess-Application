@@ -1,0 +1,13 @@
+chessPieces\Bishop.class
+chess\Player.class
+chessPieces\King.class
+chessPieces\Knight.class
+chess\SystemInfo.class
+chessPieces\Rook.class
+module-info.class
+chessPieces\Queen.class
+chess\App.class
+chess\Board.class
+chessPieces\Piece.class
+chess\Tile.class
+chessPieces\Pawn.class

@@ -7,7 +7,6 @@ import chessPieces.Knight;
 import chessPieces.Pawn;
 import chessPieces.Queen;
 import chessPieces.Rook;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.geometry.Insets;
@@ -15,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -38,13 +38,20 @@ public class Board {
     private Rook rook;
     private Queen queen;
     private King king;
-    
-    private int holderID;
-    private String holderColor;
-
     private Tile[][] tile2DArray;
     private GridPane chessBoard;
     private ArrayList<Integer> tileList;
+    private Label playerLabel;
+    private int storedPieceID;
+    private Button queenButton;
+    private Button rookButton;
+    private Button bishopButton;
+    private Button knightButton;
+    private int enPassantCount;
+    private Player player;
+    private Boolean promotionActive;
+    private int winCondition;
+    
     
     public Board() {
         this.button = button;
@@ -56,13 +63,20 @@ public class Board {
         this.rook = new Rook();
         this.queen = new Queen();
         this.king = new King();
-
-        // > Going to try to switch the rows and columns
         this.tile2DArray = new Tile[columns][rows];
         this.chessBoard = new GridPane();
-        this.holderID = 0;
-        this.holderColor = "NONE";
         this.tileList = new ArrayList<>();
+        this.playerLabel = new Label("PLAYER:\n WHITE");
+        this.storedPieceID = storedPieceID;
+        this.queenButton = new Button();
+        this.rookButton = new Button();
+        this.bishopButton = new Button();
+        this.knightButton = new Button();
+        this.enPassantCount = 0;
+        this.player = new Player();
+        this.promotionActive = Boolean.FALSE;
+        this.winCondition = 0;
+        
     }
     
     
@@ -80,13 +94,22 @@ public class Board {
         
         Button resetButton = new Button("Start Game");
         resetButton.setFont(Font.font("Cooper Black", 14));
-        Button testButton = new Button("TEST");
+        
+        setPromotionButtons(queenButton, rookButton, bishopButton, knightButton);
+        
+        playerLabel.setFont(Font.font("Cooper Black", 14));
 
         HBox gameMenu = new HBox();
         gameMenu.setStyle("-fx-border-color: black; -fx-border-width: 5 ;");
         gameMenu.setPadding(new Insets(15, 15, 15, 15));
+        gameMenu.setAlignment(Pos.CENTER);
+        gameMenu.setSpacing(25);
         gameMenu.getChildren().add(resetButton);
-        gameMenu.getChildren().add(testButton);
+        gameMenu.getChildren().add(this.playerLabel);
+        gameMenu.getChildren().add(queenButton);
+        gameMenu.getChildren().add(rookButton);
+        gameMenu.getChildren().add(bishopButton);
+        gameMenu.getChildren().add(knightButton);
         
         /**
          Adds tiles to tile2DArray.
@@ -102,30 +125,25 @@ public class Board {
         resetButton.setOnMouseClicked((event) -> {
             initializeStartingBoard(chessBoard);
             resetButton.setText("Reset Game");
+            
+            king.setBlackKingHasMoved(false);
+            king.setWhiteKingHasMoved(false);
+            
+            rook.setLeftBlackHasMoved(false);
+            rook.setRightBlackHasMoved(false);
+            rook.setLeftWhiteHasMoved(false);
+            rook.setRightWhiteHasMoved(false);
+            player.setCurrentPlayer("WHITE");
+            setPromotionButtons(queenButton, rookButton, bishopButton, knightButton);
+            playerLabel.setText("PLAYER: \n WHITE");
+            king.setCheckStatus(false, "BLACK");
+            king.setCheckStatus(false, "WHITE");
         });
         
         
-        testButton.setOnMouseClicked((event) -> {
-            tile2DArray[4][4].setPieceID(6);
-            tile2DArray[4][4].setPieceColor("BLACK");
-            
-            initializeUpdatedBoard();
-        });
-        
-
-        
-
-            
         
         
-        
-        
-        
-        
-        
-        
-        
-        
+       
         
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(gameMenu);
@@ -136,9 +154,45 @@ public class Board {
         stage.setTitle("Java-Chess");
         stage.setResizable(false);
         stage.show();
+       
+    }
+    
+    public void setPromotionButtons(Button queenButton, Button rookButton, Button bishopButton, Button knightButton) {
+        queenButton.setMinSize(40, 40);
+        queenButton.setMaxSize(40, 40);
+        Image imageFile = new Image("file:src/main/java/chessPieces/pieceImages/whiteQueen.png");
+        ImageView image = new ImageView(imageFile);
+        image.setScaleX(0.65);
+        image.setScaleY(0.65);
+        queenButton.setGraphic(image);
+        queenButton.setDisable(true);
         
+        rookButton.setMinSize(40, 40);
+        rookButton.setMaxSize(40, 40);
+        Image imageFile2 = new Image("file:src/main/java/chessPieces/pieceImages/whiteRook.png");
+        ImageView image2 = new ImageView(imageFile2);
+        image2.setScaleX(0.65);
+        image2.setScaleY(0.65);
+        rookButton.setGraphic(image2);
+        rookButton.setDisable(true);
         
-            
+        bishopButton.setMinSize(40, 40);
+        bishopButton.setMaxSize(40, 40);
+        Image imageFile3 = new Image("file:src/main/java/chessPieces/pieceImages/whiteBishop.png");
+        ImageView image3 = new ImageView(imageFile3);
+        image3.setScaleX(0.65);
+        image3.setScaleY(0.65);
+        bishopButton.setGraphic(image3);
+        bishopButton.setDisable(true);
+        
+        knightButton.setMinSize(40, 40);
+        knightButton.setMaxSize(40, 40);
+        Image imageFile4 = new Image("file:src/main/java/chessPieces/pieceImages/whiteKnight.png");
+        ImageView image4 = new ImageView(imageFile4);
+        image4.setScaleX(0.65);
+        image4.setScaleY(0.65);
+        knightButton.setGraphic(image4);
+        knightButton.setDisable(true);
     }
     
     public void empty2DArray(Tile[][] array) {
@@ -148,27 +202,306 @@ public class Board {
     }
     
 
-    
+    // updating to take paramter as to which 2d array it uses to 
     public void initializeUpdatedBoard() {
         chessBoard.getChildren().clear();
         int colorCount = 0;
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
-                Button boardButton = new Button();
-                setButtonStyle(boardButton, colorCount, x);
+                Button updatedButton = new Button();
+                setButtonStyle(updatedButton, colorCount, x);
                 colorCount++;
                 
                 // We need to get new information from the 2D array
-                
                 Tile tile = new Tile(tile2DArray[x-1][y-1].getTileButton(), tile2DArray[x-1][y-1].getXCoordinate(), 
                         tile2DArray[x-1][y-1].getYCoordinate(), tile2DArray[x-1][y-1].getPieceID(), 
-                        tile2DArray[x-1][y-1].getPieceColor());
+                        tile2DArray[x-1][y-1].getPieceColor(), tile2DArray[x-1][y-1].getEnPassantDanger(), 
+                        tile2DArray[x-1][y-1].getCheckDangerWhite(), tile2DArray[x-1][y-1].getCheckDangerBlack());
                 setTileGraphic(tile2DArray[x-1][y-1]);
 
                 chessBoard.add(tile.getTileButton(), x, y);
+                
+                // SETS ALL ON BOARD TO FALSE AND THEN RE-ADDS THEM!
+                tile2DArray[x-1][y-1].setCheckDangerWhite(Boolean.FALSE);
+                tile2DArray[x-1][y-1].setCheckDangerBlack(Boolean.FALSE);
+            }
+        }
+        for (int x = 1; x <= 8; x++) {
+            for (int y = 1; y <= 8; y++) {
+                
+                // PLACE CHECK DANGER FOR EACH PIECE ON BOARD
+                if (tile2DArray[x-1][y-1].getPieceID() == 1) {
+                    pawn.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 2) {
+                    knight.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 3) {
+                    bishop.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 4) {
+                    rook.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 5) {
+                    queen.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 6) {
+                    king.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                }
+                
+                
+   
+            }
+        }
+        
+        
+        // For every tile on the board...
+        for (int x = 1; x <= 8; x++) {
+            for (int y = 1; y <= 8; y++) {
+                
+                //System.out.println("Tile: " + "(" + x + ", " + y + "): ");
+                //System.out.println("Black Danger: " + this.tile2DArray[x-1][y-1].getCheckDangerBlack());
+                //System.out.println("White Danger: " + this.tile2DArray[x-1][y-1].getCheckDangerWhite());
+                //System.out.println("****************************************************************");
+                
+                if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getPieceColor() == "WHITE") {
+                    
+                    //System.out.println("Tile: (" + x + ", " + y + ") checkDangerBlack = " + this.tile2DArray[x-1][y-1].getCheckDangerBlack());
+                    
+                    if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getCheckDangerBlack() == true) {
+                        
+                        // set the white check danger on this tile to true;
+                        king.setCheckStatus(Boolean.TRUE, "WHITE");
+                        playerLabel.setText(player.getCurrentPlayer() + "\nCHECK");
+                        //System.out.println(this.tile2DArray[x-1][y-1].getPieceColor());
+                        //System.out.println("3: CHECK STATUS SET AS TRUE FOR WHITE KING");
+                        
+                        //CHECK FOR CHECKMATE WHITE
+                        if (player.getCurrentPlayer() == "WHITE") {
+                            if (king.getKingCheckmate("WHITE") == Boolean.TRUE) {
+                                playerLabel.setText("CHECKMATE" + "\nBLACK WINS!");
+                                playerLabel.setFont(Font.font("Cooper Black", 13));
+            
+                                for (int x1 = 1; x1 <= 8; x1++) {
+                                    for (int y1 = 1; y1 <= 8; y1++) {
+                                        this.tile2DArray[x1-1][y1-1].getTileButton().setDisable(true);
+                                    }
+                                }    
+                        
+                            } 
+                        }
+                        // SET CHECKMATE STATUS
+                        
+                        
+                        
+                        // THIS CAUSES A RUNTIME ERROR
+                        
+                        
+                    } else if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getCheckDangerBlack() == Boolean.FALSE) {
+                        // set the white check danger on this tile to false;
+                        king.setCheckStatus(Boolean.FALSE, "WHITE");
+                        //System.out.println(this.tile2DArray[x-1][y-1].getPieceColor());
+                        //System.out.println("4: CHECK STATUS SET AS FALSE FOR WHITE KING");
+                        
+                        // CHECK FOR STALEMATE WHITE
+                        if (king.getKingStalemate("WHITE") == Boolean.TRUE) {
+                                playerLabel.setText("STALEMATE!");
+            
+                                for (int x1 = 1; x1 <= 8; x1++) {
+                                    for (int y1 = 1; y1 <= 8; y1++) {
+                                        this.tile2DArray[x1-1][y1-1].getTileButton().setDisable(true);
+                                    }
+                                }   
+            
+                        }
+                    }  
+                } else if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getPieceColor() == "BLACK") {
+                    
+                    if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getCheckDangerWhite() == Boolean.TRUE) {
+                        
+                        System.out.println("IT'S TRUE! IT'S TRUE!");
+                        // set the black check danger on this tile to true;
+                        king.setCheckStatus(Boolean.TRUE, "BLACK");
+                        playerLabel.setText(player.getCurrentPlayer() + "\nCHECK");
+                        //System.out.println(this.tile2DArray[x-1][y-1].getPieceColor());
+                        //System.out.println("1: CHECK STATUS SET AS TRUE FOR BLACK KING");
+                        
+                        // CHECK FOR CHECKMATE BLACK
+                        if (player.getCurrentPlayer() == "BLACK") {
+                            if (king.getKingCheckmate("BLACK") == Boolean.TRUE) {
+                                playerLabel.setText("CHECKMATE" + "\nWHITE WINS!");
+                                playerLabel.setFont(Font.font("Cooper Black", 13));
+            
+                                for (int x1 = 1; x1 <= 8; x1++) {
+                                    for (int y1 = 1; y1 <= 8; y1++) {
+                                        this.tile2DArray[x1-1][y1-1].getTileButton().setDisable(true);
+                                    }
+                                }    
+                        
+                            } 
+                        }
+                        
+                        // SET CHECKMATE STATUS
+                        //checkForCheckmate("BLACK");
+                        
+                        
+                    // if tile is a king and the king's white check danger is false...
+                    } else if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getCheckDangerWhite() == Boolean.FALSE) {
+                        // set the black check danger on this tile to false;
+                        king.setCheckStatus(Boolean.FALSE, "BLACK");
+                        //System.out.println(this.tile2DArray[x-1][y-1].getPieceColor());
+                        //System.out.println("2: CHECK STATUS SET AS FALSE FOR BLACK KING");
+                        
+                        // CHECK FOR STALEMATE BLACK
+                        if (king.getKingStalemate("BLACK") == Boolean.TRUE) {
+                                playerLabel.setText("STALEMATE!");
+            
+                                for (int x1 = 1; x1 <= 8; x1++) {
+                                    for (int y1 = 1; y1 <= 8; y1++) {
+                                        this.tile2DArray[x1-1][y1-1].getTileButton().setDisable(true);
+                                    }
+                                }   
+            
+                        }
+                    } 
+                    
+                }
             }
         } 
+        
     }
+    
+    public void checkForCheckmate(String playerColor) {
+        
+        // used to hold number of pieces that player currently has on board
+        int pieceCount = 0;
+        // user to hold the number of pieces that are able to currently move
+        int piecesThatCannotMove = 0;
+        // used to hold the number of possible tiles checked
+        int tilesChecked = 0;
+        
+        int canMoveTiles = 0;
+        
+        
+        
+        
+        // For all tiles on board...
+        for (int x = 1; x <= 8; x++) {
+            for (int y = 1; y <= 8; y++) {
+                // if tile contains a piece of the player's color...
+                if (this.tile2DArray[x-1][y-1].getPieceColor() == playerColor) { 
+                    pieceCount++;
+                    // if selected piece cannot move...
+                    for (int i = 1; i <= 8; i++) {
+                        for (int j = 1; j <= 8; j++) {
+                            
+                            // need to make sterile "piece can move" method that does not actually alter variables or the tile2DArray.
+                            if (pieceCanMoveCheckmateCheckMaster(x, y, i, j)) {
+                                
+                                // ACTUALLY CHANGE tile2DArray
+                                String pieceColor1 = tile2DArray[x-1][y-1].getPieceColor();
+                                int pieceID1 = tile2DArray[x-1][y-1].getPieceID();
+                                String pieceColor2 = tile2DArray[i-1][j-1].getPieceColor();
+                                int pieceID2 = tile2DArray[i-1][j-1].getPieceID();
+
+                                // Sets array pieceID and pieceColor of second button to that of the first button
+                                tile2DArray[i-1][j-1].setPieceID(tile2DArray[x-1][y-1].getPieceID());
+                                tile2DArray[i-1][j-1].setPieceColor(tile2DArray[x-1][y-1].getPieceColor());
+                    
+                    
+                                // Sets array pieceID and pieceColor of first button to blank:
+                                tile2DArray[x-1][y-1].setPieceID(0);
+                                tile2DArray[x-1][y-1].setPieceColor("NONE");
+                    
+                                // Push pieces through and update tile check danger spots
+                                initializeUpdatedBoard(); 
+                                
+                                
+                                // CHECK TO SEE IF KING IS STILL IN CHECK
+                                if (king.getCheckStatus(playerColor) == Boolean.TRUE) {
+                                    tilesChecked++;
+                                } else if (king.getCheckStatus(playerColor) == Boolean.FALSE) {
+                                    tile2DArray[x-1][y-1].setPieceID(pieceID1);
+                                    tile2DArray[x-1][y-1].setPieceColor(pieceColor1);
+                                    tile2DArray[i-1][j-1].setPieceID(pieceID2);
+                                    tile2DArray[i-1][j-1].setPieceColor(pieceColor2);
+                                
+                                    setTileGraphic(tile2DArray[x-1][y-1]);
+                                    setTileGraphic(tile2DArray[i-1][j-1]);
+
+                                    //System.out.println(tile2DArray[x-1][y-1].getPieceID() + " can move at: ");
+                                    //System.out.println("canMoveTileCoords: " + x + ", " + y + ", " + i + ", " + j); 
+                                    canMoveTiles++;
+
+                                }
+                                
+                                
+                                        
+                                // CHANGE TILES BACK
+                                    // update tile board
+                                tile2DArray[x-1][y-1].setPieceID(pieceID1);
+                                tile2DArray[x-1][y-1].setPieceColor(pieceColor1);
+                                tile2DArray[i-1][j-1].setPieceID(pieceID2);
+                                tile2DArray[i-1][j-1].setPieceColor(pieceColor2);
+                                
+                                setTileGraphic(tile2DArray[x-1][y-1]);
+                                setTileGraphic(tile2DArray[i-1][j-1]);
+                    
+                                // Push pieces through and update tile check danger spots
+                                initializeUpdatedBoard();  
+                                
+                                tilesChecked++;
+      
+                            } else {
+                                
+                                tilesChecked++;        
+                                
+                                
+                                
+                                
+                                
+                                
+
+                            }    
+                        }
+                    }
+                    
+                    
+                }
+                
+            }
+        }  
+        
+        
+        //System.out.println("tilesChecked: " + tilesChecked);
+        //System.out.println("canMoveTiles: " + canMoveTiles);
+        
+        if (king.getCheckStatus(playerColor) == Boolean.FALSE && canMoveTiles == 0) {
+            king.setKingStalemate(true, playerColor);
+        } else if (king.getCheckStatus(playerColor) == Boolean.TRUE && canMoveTiles == 0) {
+            king.setKingCheckmate(true, playerColor);
+        } else {
+            // do nothing
+        }
+        
+       
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     public int convertLayoutX(int x) {
         if (x == 3) {
@@ -214,63 +547,343 @@ public class Board {
         
         boardButton.setOnMouseClicked((event) -> {
             
+            
             if (this.tileList.isEmpty()) {
 
                 int xLayout = (int) boardButton.getLayoutX();
                 int yLayout = (int) boardButton.getLayoutY();
-                System.out.println(xLayout + ", " + yLayout);
+                //System.out.println(xLayout + ", " + yLayout);
 
                 this.tileList.add(convertLayoutX(xLayout));
                 this.tileList.add(convertLayoutY(yLayout));
                 
-                System.out.println("First button layout x: " + xLayout);
-                System.out.println("First button layout y: " + yLayout);
-                System.out.println("First button tile x: " + this.tileList.get(0));
-                System.out.println("First button tile y: " + this.tileList.get(1));
-                System.out.println("First button piece: " + tile2DArray[convertLayoutX(xLayout)-1][convertLayoutY(yLayout)-1].getPieceID() + ", " + 
-                        tile2DArray[convertLayoutX(xLayout)-1][convertLayoutY(yLayout)-1].getPieceColor());
-                System.out.println("-------------------------");
+                
+                
 
             } else {
                 // Retrieves coordinates of first button from arraylist
                 int xCoor = this.tileList.get(0);
                 int yCoor = this.tileList.get(1);
                 
+                
+                
                 // Gets layoutX and layoutY from second button as int (3-458).
                 int xLayoutSecond = (int) boardButton.getLayoutX();
                 int yLayoutSecond = (int) boardButton.getLayoutY();
                 
-                System.out.println("Second button layout x: " + xLayoutSecond);
-                System.out.println("Second button layout y: " + yLayoutSecond);
-                System.out.println("Second button x: " + convertLayoutX(xLayoutSecond));
-                System.out.println("Second button y: " + convertLayoutY(yLayoutSecond));
-                System.out.println("Second button piece: " + tile2DArray[xCoor-1][yCoor-1].getPieceID() + ", " + 
-                        tile2DArray[xCoor-1][yCoor-1].getPieceColor());
-                System.out.println("***************************");
-                System.out.println();
                 
-                if (pieceCanMove(xCoor, yCoor, convertLayoutX(xLayoutSecond), convertLayoutY(yLayoutSecond))) {
-                    // set second button graphic to the graphic that is currently on first button.
+                
+                
+                // IF PIECE CAN MOVE...
+                if (pieceCanMove(xCoor, yCoor, convertLayoutX(xLayoutSecond), convertLayoutY(yLayoutSecond)) 
+                        && tile2DArray[xCoor-1][yCoor-1].getPieceColor() == player.getCurrentPlayer() && 
+                        this.promotionActive == Boolean.FALSE) {
+                    
+                    // RECORD THIS INFO IN CASE YOU NEED TO SWAP BACK:
+                    String pieceColor1 = tile2DArray[xCoor-1][yCoor-1].getPieceColor();
+                    int pieceID1 = tile2DArray[xCoor-1][yCoor-1].getPieceID();
+                    String pieceColor2 = tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1].getPieceColor();
+                    int pieceID2 = tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1].getPieceID();
+                    
+                    
+                    // MAKE PIECE CHANGE TO CHECK AND SEE IF KING IS IN CHECK IN HYPOTHETICAL PIECE MOVE
+                    // Set second button graphic to the graphic that is currently on first button.
                     boardButton.setGraphic(getTileGraphic(tile2DArray[xCoor-1][yCoor-1]));
                 
-                    //Sets array pieceID and pieceColor of second button to that of the first button
+                    // Sets array pieceID and pieceColor of second button to that of the first button
                     tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1].setPieceID(tile2DArray[xCoor-1][yCoor-1].getPieceID());
                     tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1].setPieceColor(tile2DArray[xCoor-1][yCoor-1].getPieceColor());
-                
-                    //Sets array pieceID and pieceColor of first button to blank:
+                    
+                    
+                    
+                    
+                    // Sets array pieceID and pieceColor of first button to blank:
                     tile2DArray[xCoor-1][yCoor-1].setPieceID(0);
                     tile2DArray[xCoor-1][yCoor-1].setPieceColor("NONE");
                     setTileGraphic(tile2DArray[xCoor-1][yCoor-1]);
+                    
+                    // Push pieces through and update tile check danger spots
+                    initializeUpdatedBoard(); 
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    //System.out.println("CURRENT PLAYER: " + player.getCurrentPlayer());
+                    if (king.getCheckStatus(player.getCurrentPlayer()) == Boolean.FALSE) {
+                        
+                        
+                        // DO NOT REPEAT ABOVE CODE. KEEP tile2DArray CHANGES, DO THE EXTRA, AND UPDATE BOARD AGAIN!
+                        
+                        
+                        // Set en passant settings
+                        // If enPassantCount = 1, set enPassantCount back to 0 and for each tile on the board in en passant danger, set it to false.
+                        if (this.enPassantCount == 1) {
+                            this.enPassantCount = 0;
+                            for (int xColumn = 1; xColumn <= 8; xColumn++) {
+                                for (int yRow = 1; yRow <= 8; yRow++) {
+                                    tile2DArray[xColumn-1][yRow-1].setEnPassantDanger(Boolean.FALSE);
+                                }
+                            }
+                        }
+                        // FINAL RETURN TRUE
+                        // For each tile on the board, if there is a tile in en passant danger, set enPassantCount to 1.
+                        for (int xColumn = 1; xColumn <= 8; xColumn++) {
+                            for (int yRow = 1; yRow <= 8; yRow++) {
+                                if (tile2DArray[xColumn-1][yRow-1].getEnPassantDanger() == Boolean.TRUE) {
+                                    if (this.enPassantCount == 0) {
+                                        this.enPassantCount = 1;
+                                    }
+                                }   
+                            }
+                        }
+                    
+
+                    
+                    
+                    
+                        // FINAL RETURN TRUE
+                        int promotionAlert = 0;
+                    
+                        // FINAL RETURN TRUE
+                        // Checking for pawn promotion
+                        if ((tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1].getPieceID()== 1) && 
+                                (convertLayoutY(yLayoutSecond) == 1 || convertLayoutY(yLayoutSecond) == 8)) {
+                        
+                            this.promotionActive = Boolean.TRUE;
+                        
+                            getPromotionBoard(convertLayoutX(xLayoutSecond)-1, convertLayoutY(yLayoutSecond)-1);
+                        
+                            if (player.getCurrentPlayer() == "WHITE") {
+                                // add to black statements
+                                promotionAlert = 2;
+                            } else if (player.getCurrentPlayer() == "BLACK") {
+                                // add to white 
+                                promotionAlert = 1;
+                            }
+                        
+                        
+                        // FINAL RETURN TRUE    
+                        initializeUpdatedBoard();  
+   
+                        }
+                        // SWITCH PLAYERS AFTER SUCCESSFUL PIECE MOVE
+                        if (player.getCurrentPlayer() == "WHITE") {
+                            player.setCurrentPlayer("BLACK");
+                            playerLabel.setText("PLAYER: \n BLACK");
+                        } else if (player.getCurrentPlayer() == "BLACK") {
+                            player.setCurrentPlayer("WHITE");
+                            playerLabel.setText("PLAYER: \n WHITE");
+                        }
+                    
+                        // ADDED TO SWITCH IMAGES OF PROMOTION BUTTONS
+                        String imageFileDirectory = "None";
+                        if (player.getCurrentPlayer() == "WHITE" || player.getCurrentPlayer() == "NONE") {
+                            imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/whiteQueen.png";
+                            if (promotionAlert == 1) {
+                                imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/blackQueen.png";
+                            
+                            }
+            
+                        } else if (player.getCurrentPlayer() == "BLACK") {
+                            imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/blackQueen.png";
+                            if (promotionAlert == 2) {
+                                imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/whiteQueen.png";
+                            
+                            }
+                        }
+                        Image imageFile = new Image(imageFileDirectory);
+                        ImageView image = new ImageView(imageFile);
+                        image.setScaleX(0.65);
+                        image.setScaleY(0.65);
+                        queenButton.setGraphic(image);
+                    
+                        if (player.getCurrentPlayer() == "WHITE" || player.getCurrentPlayer() == "NONE") {
+                            imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/whiteRook.png";
+                            if (promotionAlert == 1) {
+                                imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/blackRook.png";
+                            
+                            }
+                        } else if (player.getCurrentPlayer() == "BLACK") {
+                            imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/blackRook.png";
+                            if (promotionAlert == 2) {
+                                imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/whiteRook.png";
+                            
+                            }
+                        }
+                        Image imageFile2 = new Image(imageFileDirectory);
+                        ImageView image2 = new ImageView(imageFile2);
+                        image2.setScaleX(0.65);
+                        image2.setScaleY(0.65);
+                        rookButton.setGraphic(image2);
+                    
+                        if (player.getCurrentPlayer() == "WHITE" || player.getCurrentPlayer() == "NONE") {
+                            imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/whiteBishop.png";
+                            if (promotionAlert == 1) {
+                                imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/blackBishop.png";
+                            
+                            }
+                        } else if (player.getCurrentPlayer() == "BLACK") {
+                            imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/blackBishop.png";
+                            if (promotionAlert == 2) {
+                                imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/whiteBishop.png";
+                            
+                            }
+                        }
+                        Image imageFile3 = new Image(imageFileDirectory);
+                        ImageView image3 = new ImageView(imageFile3);
+                        image3.setScaleX(0.65);
+                        image3.setScaleY(0.65);
+                        bishopButton.setGraphic(image3);
+                    
+                        if (player.getCurrentPlayer() == "WHITE" || player.getCurrentPlayer() == "NONE") {
+                            imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/whiteKnight.png";
+                            if (promotionAlert == 1) {
+                                imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/blackKnight.png";
+                                playerLabel.setText("PLAYER: \n BLACK");
+                                promotionAlert = 0;
+                            }
+                        } else if (player.getCurrentPlayer() == "BLACK") {
+                            imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/blackKnight.png";
+                            if (promotionAlert == 2) {
+                                imageFileDirectory = "file:src/main/java/chessPieces/pieceImages/whiteKnight.png";
+                                playerLabel.setText("PLAYER: \n WHITE");
+                                promotionAlert = 0;
+                            }
+                        }
+                        Image imageFile4 = new Image(imageFileDirectory);
+                        ImageView image4 = new ImageView(imageFile4);
+                        image4.setScaleX(0.65);
+                        image4.setScaleY(0.65);
+                        knightButton.setGraphic(image4);
+                
+                        
+                        
+                    } else if (king.getCheckStatus(player.getCurrentPlayer()) == Boolean.TRUE) {
+                        
+                        
+                
+                        //System.out.println("THE " + player.getCurrentPlayer() + " KING IS IN CHECK!");
+                
+                        // REVERSE PIECE MOVES because the player's king is still in check!!
+                        // Set second button graphic to the graphic that is currently on first button.
+                        
+                        //boardButton.setGraphic(getTileGraphic(tile2DArray[xCoor-1][yCoor-1]));
+                
+                        tile2DArray[xCoor-1][yCoor-1].setPieceID(pieceID1);
+                        tile2DArray[xCoor-1][yCoor-1].setPieceColor(pieceColor1);
+                        tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1].setPieceID(pieceID2);
+                        tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1].setPieceColor(pieceColor2);
+                        setTileGraphic(tile2DArray[xCoor-1][yCoor-1]);
+                        setTileGraphic(tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1]);
+                    
+                        // Push pieces through and update tile check danger spots
+                        initializeUpdatedBoard(); 
+                        
+                        
+                        // do nothing, moving piece has failed. 
+                
+                        // ########################################### CONCERN #########################
+                        
+            
+                        
+            
+                        // ########################################### CONCERN #########################
+                
+                
+                
+                
+                
+                
+                
+                    }
+                    
+                    
+ 
                 }
                 
                 
-                
+                // FINAL RETURN TRUE
                 //Clear list so first button can collect coordinates. 
                 this.tileList.clear();
             }
             
+            int whiteKingX = 0;
+            int whiteKingY = 0;
+            int blackKingX = 0;
+            int blackKingY = 0;
+            
+            // for all tiles...
+            for (int x1 = 1; x1 <= 8; x1++) {
+                for (int y1 = 1; y1 <= 8; y1++) {
+                    
+                    if (tile2DArray[x1-1][y1-1].getPieceID() == 6 && tile2DArray[x1-1][y1-1].getPieceColor() == "WHITE") {
+                        whiteKingX = x1;
+                        whiteKingY = y1;
+                    } else if (tile2DArray[x1-1][y1-1].getPieceID() == 6 && tile2DArray[x1-1][y1-1].getPieceColor() == "BLACK") {
+                        blackKingX = x1;
+                        blackKingY = y1;
+                    }
+                    
+                }
+            }
+            
+            
+            //System.out.println("Black King: (" + blackKingX + ", " + blackKingY + ")");
+            //System.out.println("White King: (" + whiteKingX + ", " + whiteKingY + ")");
+            
+            
+            if (king.getCheckStatus(player.getCurrentPlayer()) == Boolean.TRUE) {
+                checkForCheckmate(player.getCurrentPlayer());
+            } 
+            
+            
+            // PROBLEM WITH STALEMATE DOES NOT LIE IN kingCanMove. IT LIES IN checkForCheckmate()...
+            //if (player.getCurrentPlayer() == "WHITE") {
+                //if (king.getCheckStatus("WHITE") == Boolean.FALSE && king.kingCanMove(tile2DArray, whiteKingX, whiteKingY) == Boolean.FALSE) {
+                    //checkForCheckmate("WHITE");
+                //}
+            //} else if (player.getCurrentPlayer() == "BLACK") {
+               //if (king.getCheckStatus("BLACK") == Boolean.FALSE && king.kingCanMove(tile2DArray, blackKingX, blackKingY) == Boolean.FALSE) {
+                    //checkForCheckmate("BLACK");
+                //}
+            //}
+            
+            
+            
+            // ###############################    
+            //  NEED TO CHECK FOR STALEMATE
+            // ############################### 
+            
+
+            
+            
+            // ADDING THIS AS EXTRA
+            initializeUpdatedBoard();
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
         });
-        
         boardButton.setMinHeight(65);
         boardButton.setMaxHeight(65);
         boardButton.setMinWidth(65);
@@ -306,470 +919,424 @@ public class Board {
                 boardButton.setStyle(" -fx-background-color: #fefefe; -fx-border-color: black; -fx-border-width: 2 ; "
                             + "-fx-background-insets: 0; -fx-background-radius:0; ");
             });
-        }
+        }   
+    }
+    
+    public void getPromotionBoard(int xTile, int yTile) {
         
+        // Store color of pawn being promoted.
+        String copyColor = tile2DArray[xTile][yTile].getPieceColor();
+        
+        queenButton.setDisable(false);
+        rookButton.setDisable(false);
+        bishopButton.setDisable(false);
+        knightButton.setDisable(false);
+        
+        queenButton.setOnMouseClicked((event) -> {
 
+            queenButton.setDisable(true);
+            rookButton.setDisable(true);
+            bishopButton.setDisable(true);
+            knightButton.setDisable(true);
+            
+            if (copyColor == "BLACK") {
+                Image imageFile1 = new Image("file:src/main/java/chessPieces/pieceImages/whiteQueen.png");
+                ImageView image = new ImageView(imageFile1);
+                image.setScaleX(0.65);
+                image.setScaleY(0.65);
+                queenButton.setGraphic(image);
+                Image imageFile2 = new Image("file:src/main/java/chessPieces/pieceImages/whiteRook.png");
+                ImageView image2 = new ImageView(imageFile2);
+                image2.setScaleX(0.65);
+                image2.setScaleY(0.65);
+                rookButton.setGraphic(image2);
+                Image imageFile3 = new Image("file:src/main/java/chessPieces/pieceImages/whiteBishop.png");
+                ImageView image3 = new ImageView(imageFile3);
+                image3.setScaleX(0.65);
+                image3.setScaleY(0.65);
+                bishopButton.setGraphic(image3);
+                Image imageFile4 = new Image("file:src/main/java/chessPieces/pieceImages/whiteKnight.png");
+                ImageView image4 = new ImageView(imageFile4);
+                image4.setScaleX(0.65);
+                image4.setScaleY(0.65);
+                knightButton.setGraphic(image4);
+                playerLabel.setText("PLAYER: \n WHITE");
+            } else {
+                Image imageFile1 = new Image("file:src/main/java/chessPieces/pieceImages/blackQueen.png");
+                ImageView image = new ImageView(imageFile1);
+                image.setScaleX(0.65);
+                image.setScaleY(0.65);
+                queenButton.setGraphic(image);
+                Image imageFile2 = new Image("file:src/main/java/chessPieces/pieceImages/blackRook.png");
+                ImageView image2 = new ImageView(imageFile2);
+                image2.setScaleX(0.65);
+                image2.setScaleY(0.65);
+                rookButton.setGraphic(image2);
+                Image imageFile3 = new Image("file:src/main/java/chessPieces/pieceImages/blackBishop.png");
+                ImageView image3 = new ImageView(imageFile3);
+                image3.setScaleX(0.65);
+                image3.setScaleY(0.65);
+                bishopButton.setGraphic(image3);
+                Image imageFile4 = new Image("file:src/main/java/chessPieces/pieceImages/blackKnight.png");
+                ImageView image4 = new ImageView(imageFile4);
+                image4.setScaleX(0.65);
+                image4.setScaleY(0.65);
+                knightButton.setGraphic(image4);
+                playerLabel.setText("PLAYER: \n BLACK");
+            }
+            
+            
+            
+            tile2DArray[xTile][yTile].setPieceColor(copyColor);
+            tile2DArray[xTile][yTile].setPieceID(5);
+            initializeUpdatedBoard();
+            this.promotionActive = Boolean.FALSE;
+ 
+        });
+        rookButton.setOnMouseClicked((event) -> {
+
+            queenButton.setDisable(true);
+            rookButton.setDisable(true);
+            bishopButton.setDisable(true);
+            knightButton.setDisable(true);
+            
+            if (copyColor == "BLACK") {
+                Image imageFile1 = new Image("file:src/main/java/chessPieces/pieceImages/whiteQueen.png");
+                ImageView image = new ImageView(imageFile1);
+                image.setScaleX(0.65);
+                image.setScaleY(0.65);
+                queenButton.setGraphic(image);
+                Image imageFile2 = new Image("file:src/main/java/chessPieces/pieceImages/whiteRook.png");
+                ImageView image2 = new ImageView(imageFile2);
+                image2.setScaleX(0.65);
+                image2.setScaleY(0.65);
+                rookButton.setGraphic(image2);
+                Image imageFile3 = new Image("file:src/main/java/chessPieces/pieceImages/whiteBishop.png");
+                ImageView image3 = new ImageView(imageFile3);
+                image3.setScaleX(0.65);
+                image3.setScaleY(0.65);
+                bishopButton.setGraphic(image3);
+                Image imageFile4 = new Image("file:src/main/java/chessPieces/pieceImages/whiteKnight.png");
+                ImageView image4 = new ImageView(imageFile4);
+                image4.setScaleX(0.65);
+                image4.setScaleY(0.65);
+                knightButton.setGraphic(image4);
+                playerLabel.setText("PLAYER: \n WHITE");
+            } else {
+                Image imageFile1 = new Image("file:src/main/java/chessPieces/pieceImages/blackQueen.png");
+                ImageView image = new ImageView(imageFile1);
+                image.setScaleX(0.65);
+                image.setScaleY(0.65);
+                queenButton.setGraphic(image);
+                Image imageFile2 = new Image("file:src/main/java/chessPieces/pieceImages/blackRook.png");
+                ImageView image2 = new ImageView(imageFile2);
+                image2.setScaleX(0.65);
+                image2.setScaleY(0.65);
+                rookButton.setGraphic(image2);
+                Image imageFile3 = new Image("file:src/main/java/chessPieces/pieceImages/blackBishop.png");
+                ImageView image3 = new ImageView(imageFile3);
+                image3.setScaleX(0.65);
+                image3.setScaleY(0.65);
+                bishopButton.setGraphic(image3);
+                Image imageFile4 = new Image("file:src/main/java/chessPieces/pieceImages/blackKnight.png");
+                ImageView image4 = new ImageView(imageFile4);
+                image4.setScaleX(0.65);
+                image4.setScaleY(0.65);
+                knightButton.setGraphic(image4);
+                playerLabel.setText("PLAYER: \n BLACK");
+            }
+            
+            tile2DArray[xTile][yTile].setPieceColor(copyColor);
+            tile2DArray[xTile][yTile].setPieceID(4);
+            initializeUpdatedBoard();
+            this.promotionActive = Boolean.FALSE;
+ 
+        });
+        bishopButton.setOnMouseClicked((event) -> {
+
+            queenButton.setDisable(true);
+            rookButton.setDisable(true);
+            bishopButton.setDisable(true);
+            knightButton.setDisable(true);
+            
+            if (copyColor == "BLACK") {
+                Image imageFile1 = new Image("file:src/main/java/chessPieces/pieceImages/whiteQueen.png");
+                ImageView image = new ImageView(imageFile1);
+                image.setScaleX(0.65);
+                image.setScaleY(0.65);
+                queenButton.setGraphic(image);
+                Image imageFile2 = new Image("file:src/main/java/chessPieces/pieceImages/whiteRook.png");
+                ImageView image2 = new ImageView(imageFile2);
+                image2.setScaleX(0.65);
+                image2.setScaleY(0.65);
+                rookButton.setGraphic(image2);
+                Image imageFile3 = new Image("file:src/main/java/chessPieces/pieceImages/whiteBishop.png");
+                ImageView image3 = new ImageView(imageFile3);
+                image3.setScaleX(0.65);
+                image3.setScaleY(0.65);
+                bishopButton.setGraphic(image3);
+                Image imageFile4 = new Image("file:src/main/java/chessPieces/pieceImages/whiteKnight.png");
+                ImageView image4 = new ImageView(imageFile4);
+                image4.setScaleX(0.65);
+                image4.setScaleY(0.65);
+                knightButton.setGraphic(image4);
+                playerLabel.setText("PLAYER: \n WHITE");
+            } else {
+                Image imageFile1 = new Image("file:src/main/java/chessPieces/pieceImages/blackQueen.png");
+                ImageView image = new ImageView(imageFile1);
+                image.setScaleX(0.65);
+                image.setScaleY(0.65);
+                queenButton.setGraphic(image);
+                Image imageFile2 = new Image("file:src/main/java/chessPieces/pieceImages/blackRook.png");
+                ImageView image2 = new ImageView(imageFile2);
+                image2.setScaleX(0.65);
+                image2.setScaleY(0.65);
+                rookButton.setGraphic(image2);
+                Image imageFile3 = new Image("file:src/main/java/chessPieces/pieceImages/blackBishop.png");
+                ImageView image3 = new ImageView(imageFile3);
+                image3.setScaleX(0.65);
+                image3.setScaleY(0.65);
+                bishopButton.setGraphic(image3);
+                Image imageFile4 = new Image("file:src/main/java/chessPieces/pieceImages/blackKnight.png");
+                ImageView image4 = new ImageView(imageFile4);
+                image4.setScaleX(0.65);
+                image4.setScaleY(0.65);
+                knightButton.setGraphic(image4);
+                playerLabel.setText("PLAYER: \n BLACK");
+            }
+            
+            tile2DArray[xTile][yTile].setPieceColor(copyColor);
+            tile2DArray[xTile][yTile].setPieceID(3);
+            initializeUpdatedBoard();
+            this.promotionActive = Boolean.FALSE;
+ 
+        });
+        knightButton.setOnMouseClicked((event) -> {
+
+            queenButton.setDisable(true);
+            rookButton.setDisable(true);
+            bishopButton.setDisable(true);
+            knightButton.setDisable(true);
+            
+            if (copyColor == "BLACK") {
+                Image imageFile1 = new Image("file:src/main/java/chessPieces/pieceImages/whiteQueen.png");
+                ImageView image = new ImageView(imageFile1);
+                image.setScaleX(0.65);
+                image.setScaleY(0.65);
+                queenButton.setGraphic(image);
+                Image imageFile2 = new Image("file:src/main/java/chessPieces/pieceImages/whiteRook.png");
+                ImageView image2 = new ImageView(imageFile2);
+                image2.setScaleX(0.65);
+                image2.setScaleY(0.65);
+                rookButton.setGraphic(image2);
+                Image imageFile3 = new Image("file:src/main/java/chessPieces/pieceImages/whiteBishop.png");
+                ImageView image3 = new ImageView(imageFile3);
+                image3.setScaleX(0.65);
+                image3.setScaleY(0.65);
+                bishopButton.setGraphic(image3);
+                Image imageFile4 = new Image("file:src/main/java/chessPieces/pieceImages/whiteKnight.png");
+                ImageView image4 = new ImageView(imageFile4);
+                image4.setScaleX(0.65);
+                image4.setScaleY(0.65);
+                knightButton.setGraphic(image4);
+                playerLabel.setText("PLAYER: \n WHITE");
+            } else {
+                Image imageFile1 = new Image("file:src/main/java/chessPieces/pieceImages/blackQueen.png");
+                ImageView image = new ImageView(imageFile1);
+                image.setScaleX(0.65);
+                image.setScaleY(0.65);
+                queenButton.setGraphic(image);
+                Image imageFile2 = new Image("file:src/main/java/chessPieces/pieceImages/blackRook.png");
+                ImageView image2 = new ImageView(imageFile2);
+                image2.setScaleX(0.65);
+                image2.setScaleY(0.65);
+                rookButton.setGraphic(image2);
+                Image imageFile3 = new Image("file:src/main/java/chessPieces/pieceImages/blackBishop.png");
+                ImageView image3 = new ImageView(imageFile3);
+                image3.setScaleX(0.65);
+                image3.setScaleY(0.65);
+                bishopButton.setGraphic(image3);
+                Image imageFile4 = new Image("file:src/main/java/chessPieces/pieceImages/blackKnight.png");
+                ImageView image4 = new ImageView(imageFile4);
+                image4.setScaleX(0.65);
+                image4.setScaleY(0.65);
+                knightButton.setGraphic(image4);
+                playerLabel.setText("PLAYER: \n BLACK");
+            }
+            
+            tile2DArray[xTile][yTile].setPieceColor(copyColor);
+            tile2DArray[xTile][yTile].setPieceID(2);
+            initializeUpdatedBoard();
+            this.promotionActive = Boolean.FALSE;
+ 
+        });
         
-        
-        
+        initializeUpdatedBoard();
         
     }
     
-    public boolean pieceCanMove(int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
+    public boolean pieceCanMoveCheckmateCheckMaster(int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         // This method will determine if a piece can move. If can return true, if cannot return false.
         String firstColor = this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor();
         String secondColor = this.tile2DArray[xSecondTile-1][ySecondTile-1].getPieceColor();
-        System.out.println("&&&&&&&&&&&&&&&&&");
-        System.out.println(firstColor + " + " + secondColor);
-        System.out.println("&&&&&&&&&&&&&&&&&");
+        
         
         int xTileOne = xFirstTile - 1;
         int yTileOne = yFirstTile - 1;
         int xTileTwo = xSecondTile - 1;
         int yTileTwo = ySecondTile - 1;
         
+        //Boolean returnBoolean = Boolean.FALSE;
+        
         // if second tile contains a king, return false;
         if (tile2DArray[xTileTwo][yTileTwo].getPieceID() == 6) {
-            System.out.println("Failed due to: you cannot capture a king!");
+            //System.out.println("Failed due to: you cannot capture a king!");
             return false;
         }
+        
+        Boolean returnBoolean = Boolean.FALSE;
+        
+        
 
         // if moving piece color is not the same as piece occupying tile being moved to.
         if (!(this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor() == this.tile2DArray[xSecondTile-1][ySecondTile-1].getPieceColor())) {
             
-            // ****** if piece is a pawn *******
+            // if piece is a pawn 
             if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 1) {
                 
-                // if pawn is white
-                if (this.tile2DArray[xTileOne][yTileOne].getPieceColor() == "WHITE") {   
-                    // if pawn is in white starting position (y = 7)
-                    if (yFirstTile == 7) {
-                        // if pawn wants to move one space ahead.
-                        if ((xTileOne == xTileTwo) && (yTileOne - 1 == yTileTwo)) {
-                            // if there is no piece directly in front of the pawn.
-                            if((this.tile2DArray[xTileOne][yTileOne - 1].getPieceID() == 0) && (this.tile2DArray[xTileOne][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: a piece blocks the pawn.");
-                            return false;
-                        // if pawn wants to move two spaces ahead.    
-                        } else if ((xTileOne == xTileTwo) && (yTileOne - 2 == yTileTwo)) {
-                            // if there is no piece directly in front of the pawn.
-                            if((this.tile2DArray[xTileOne][yTileOne - 1].getPieceID() == 0) && (this.tile2DArray[xTileOne][yTileOne - 2] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: a piece blocks the pawn.");
-                            return false;
-                        // if pawn is in column x = 1.
-                        } else if (xFirstTile == 1) {
-                            // if suitable diagonal has enemy.
-                            if (((this.tile2DArray[xTileOne + 1][yTileOne - 1].getPieceColor() == "BLACK") && this.tile2DArray[xTileOne + 1][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: pawn is on x = 1 and would cause error.");
-                            return false;
-                        // if pawn is in column x = 8.    
-                        } else if (xFirstTile == 8) {
-                            // if suitable diagonal has enemy.
-                            if (((this.tile2DArray[xTileOne - 1][yTileOne - 1].getPieceColor() == "BLACK") && this.tile2DArray[xTileOne - 1][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: pawn is on x = 8 and would cause error.");
-                            return false;
-                            
-                        // if pawn wants to move diagonal one space (right or left) to take black piece.    
-                        } else if (((this.tile2DArray[xTileOne - 1][yTileOne - 1].getPieceColor() == "BLACK") && this.tile2DArray[xTileOne - 1][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])
-                                || ((this.tile2DArray[xTileOne + 1][yTileOne - 1].getPieceColor() == "BLACK") && this.tile2DArray[xTileOne + 1][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                            System.out.println("THREE");
-                            return true;
-                        // no other valid move can be made.
-                        } else {
-                            System.out.println("FOUR");
-                            System.out.println("Failed due to: invalid pawn move.");
-                            return false;
-                        }
-                    
-                    // if pawn is in any other position (y = 1, 2, 3, 4, 5, 6, or 8)    
-                    } else {
-                        // if pawn wants to move one space ahead. 
-                        if ((xTileOne == xTileTwo) && (yTileOne - 1 == yTileTwo)) {
-                            // if there is no piece directly in front of the pawn.
-                            if((this.tile2DArray[xTileOne][yTileOne - 1].getPieceID() == 0) && (this.tile2DArray[xTileOne][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: a piece blocks the pawn.");
-                            return false;
-                        // if pawn is in column x = 1.
-                        } else if (xFirstTile == 1) {
-                            // if suitable diagonal has enemy.
-                            if (((this.tile2DArray[xTileOne + 1][yTileOne - 1].getPieceColor() == "BLACK") && this.tile2DArray[xTileOne + 1][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: pawn is on x = 1 and would cause error.");
-                            return false;
-                        // if pawn is in column x = 8.    
-                        } else if (xFirstTile == 8) {
-                            // if suitable diagonal has enemy.
-                            if (((this.tile2DArray[xTileOne - 1][yTileOne - 1].getPieceColor() == "BLACK") && this.tile2DArray[xTileOne - 1][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: pawn is on x = 8 and would cause error.");
-                            return false;
-                            
-                        // if pawn wants to move diagonal one space (right or left) to take black piece.    
-                        } else if (((this.tile2DArray[xTileOne - 1][yTileOne - 1].getPieceColor() == "BLACK") && this.tile2DArray[xTileOne - 1][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])
-                                || ((this.tile2DArray[xTileOne + 1][yTileOne - 1].getPieceColor() == "BLACK") && this.tile2DArray[xTileOne + 1][yTileOne - 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                            System.out.println("THREE");
-                            return true;
-                        // no other valid move can be made.
-                        } else {
-                            System.out.println("SEVEN");
-                            System.out.println("Failed due to: invalid pawn move.");
-                            return false;
-                        }
-                    }  
-                    
-                // if pawn is black    
-                } else if (this.tile2DArray[xTileOne][yTileOne].getPieceColor() == "BLACK") {
-                    
-                    // if pawn is in black starting position (y = 2)
-                    if (yFirstTile == 2) {
-                        // if pawn wants to move one space ahead.
-                        if ((xTileOne == xTileTwo) && (yTileOne + 1 == yTileTwo)) {
-                            // if there is no piece directly in front of the pawn.
-                            if((this.tile2DArray[xTileOne][yTileOne + 1].getPieceID() == 0) && (this.tile2DArray[xTileOne][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: a piece blocks the pawn.");
-                            return false;
-                        // if pawn wants to move two spaces ahead.    
-                        } else if ((xTileOne == xTileTwo) && (yTileOne + 2 == yTileTwo)) {
-                            // if there is no piece directly in front of the pawn.
-                            if((this.tile2DArray[xTileOne][yTileOne + 1].getPieceID() == 0) && (this.tile2DArray[xTileOne][yTileOne + 2] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: a piece blocks the pawn.");
-                            return false;
-                        // if pawn is in column x = 1.
-                        } else if (xFirstTile == 1) {
-                            // if suitable diagonal has enemy.
-                            if (((this.tile2DArray[xTileOne + 1][yTileOne + 1].getPieceColor() == "WHITE") && this.tile2DArray[xTileOne + 1][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: pawn is on x = 1 and would cause error.");
-                            return false;
-                        // if pawn is in column x = 8.    
-                        } else if (xFirstTile == 8) {
-                            // if suitable diagonal has enemy.
-                            if (((this.tile2DArray[xTileOne - 1][yTileOne + 1].getPieceColor() == "WHITE") && this.tile2DArray[xTileOne - 1][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: pawn is on x = 8 and would cause error.");
-                            return false;  
-                        // if pawn wants to move diagonal one space (right or left) to take black piece.    
-                        } else if (((this.tile2DArray[xTileOne + 1][yTileOne + 1].getPieceColor() == "WHITE") && this.tile2DArray[xTileOne + 1][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])
-                                || ((this.tile2DArray[xTileOne - 1][yTileOne + 1].getPieceColor() == "WHITE") && this.tile2DArray[xTileOne - 1][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                           
-                            return true;
-                        // no other valid move can be made.
-                        } else {
-                            System.out.println("Failed due to: invalid pawn move.");
-                            return false;
-                        }
-                    } else {
-                        if ((xTileOne == xTileTwo) && (yTileOne + 1 == yTileTwo)) {
-                            // if there is no piece directly in front of the pawn.
-                            if((this.tile2DArray[xTileOne][yTileOne + 1].getPieceID() == 0) && (this.tile2DArray[xTileOne][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: a piece blocks the pawn.");
-                            return false;
-                        // if pawn is in column x = 1.
-                        } else if (xFirstTile == 1) {
-                            // if suitable diagonal has enemy.
-                            if (((this.tile2DArray[xTileOne + 1][yTileOne + 1].getPieceColor() == "WHITE") && this.tile2DArray[xTileOne + 1][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: pawn is on x = 1 and would cause error.");
-                            return false;
-                        // if pawn is in column x = 8.    
-                        } else if (xFirstTile == 8) {
-                            // if suitable diagonal has enemy.
-                            if (((this.tile2DArray[xTileOne - 1][yTileOne + 1].getPieceColor() == "WHITE") && this.tile2DArray[xTileOne - 1][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                                return true;
-                            }
-                            System.out.println("Failed due to: pawn is on x = 8 and would cause error.");
-                            return false; 
-                        // if pawn wants to move diagonal one space (right or left) to take black piece.    
-                        } else if (((this.tile2DArray[xTileOne + 1][yTileOne + 1].getPieceColor() == "WHITE") && this.tile2DArray[xTileOne + 1][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])
-                                || ((this.tile2DArray[xTileOne - 1][yTileOne + 1].getPieceColor() == "WHITE") && this.tile2DArray[xTileOne - 1][yTileOne + 1] == this.tile2DArray[xTileTwo][yTileTwo])) {
-                            
-                            return true;
-                        // no other valid move can be made.
-                        } else {
-                            System.out.println("Failed due to: invalid pawn move.");
-                            return false;
-                        }
-                    }   
-                }
-                
-                
-                
-                
-                
-                
+                return pawn.canPieceMoveCheckmateCheck(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = pawn.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
                 
             // if piece is a knight
             } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 2) {
-                return true;
                 
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+                return knight.canPieceMoveCheckmateCheck(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = knight.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
                 
             // if piece is a bishop    
             } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 3) {
                 
-                // Creation of list to store diagonal tile considerations
-                ArrayList<Integer> tilePairs = new ArrayList<>();
-                // maximum number of tiles a bishop can transervse from each direction
-                int topLeftDiagonalMax = topLeftTiles(xFirstTile, yFirstTile);
-                int topRightDiagonalMax = topRightTiles(xFirstTile, yFirstTile);
-                int bottomLeftDiagonalMax = bottomLeftTiles(xFirstTile, yFirstTile);
-                int bottomRightDiagonalMax = bottomRightTiles(xFirstTile, yFirstTile);
+                return bishop.canPieceMoveCheckmateCheck(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = bishop.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
                 
-                // setting first tile x and y to local variables
-                int x = xFirstTile;
-                int y = yFirstTile;
-
-                // Check if move is within the maximum tile distribution of the top left diagonal
-                for (int i = topLeftDiagonalMax; i > 0; i--) {
-                    // move to next diagonal tile
-                    x -= 1;
-                    y -= 1;
-                    // if tile piece color is "NONE" then add x & y to tilePairs list.
-                    if (this.tile2DArray[x - 1][y - 1].getPieceColor() == "NONE") {
-                        tilePairs.add(x);
-                        tilePairs.add(y);
-                    // if tile piece color is the same as the current tile, stop adding tile to tilePairs list.
-                    } else if (this.tile2DArray[x - 1][y - 1].getPieceColor() == this.tile2DArray[xTileOne][yTileOne].getPieceColor()) {
-                        i = 0;
-                    // if tile piece color is different from the current tile, add x & y to tilePairs list and continue.
-                    } else if (this.tile2DArray[x - 1][y - 1].getPieceColor() != this.tile2DArray[xTileOne][yTileOne].getPieceColor()) {
-                        tilePairs.add(x);
-                        tilePairs.add(y);
-                        i = 0;
-                    } else {
-                        // no other possibility.
-                    }   
-                }
-                // if selected tile (second tile) is within the tilePairs list, return true
-                for (int i = 0; i < tilePairs.size() - 1; i+=2) {
-                    if (xSecondTile == tilePairs.get(i) && ySecondTile == tilePairs.get(i + 1)) {  
-                        return true;
-                    }
-                }
-                // clear out tilePairs list for next diagonal check
-                tilePairs.clear();
-                
-                // setting first tile x and y to local variables
-                int x2 = xFirstTile;
-                int y2 = yFirstTile;
-                
-                // Check if move is within the maximum tile distribution of the top right diagonal
-                for (int i = topRightDiagonalMax; i > 0; i--) {
-                    // move to next diagonal tile
-                    x2 += 1;
-                    y2 -= 1;
-                    // if tile piece color is "NONE" then add x & y to tilePairs list.
-                    if (this.tile2DArray[x2 - 1][y2 - 1].getPieceColor() == "NONE") {
-                        tilePairs.add(x2);
-                        tilePairs.add(y2);
-                    // if tile piece color is the same as the current tile, stop adding tile to tilePairs list.
-                    } else if (this.tile2DArray[x2 - 1][y2 - 1].getPieceColor() == this.tile2DArray[xTileOne][yTileOne].getPieceColor()) {
-                        i = 0;
-                    // if tile piece color is different from the current tile, add x & y to tilePairs list and continue.
-                    } else if (this.tile2DArray[x2 - 1][y2 - 1].getPieceColor() != this.tile2DArray[xTileOne][yTileOne].getPieceColor()) {
-                        tilePairs.add(x2);
-                        tilePairs.add(y2);
-                        i = 0;
-                    } else {
-                        // no other possibility.
-                    }
-                }
-                // if selected tile (second tile) is within the tilePairs list, return true
-                for (int i = 0; i < tilePairs.size() - 1; i+=2) {
-                    if (xSecondTile == tilePairs.get(i) && ySecondTile == tilePairs.get(i + 1)) {
-                        return true;
-                    }
-                }
-                // clear out tilePairs list for next diagonal check
-                tilePairs.clear();
-                
-                // setting first tile x and y to local variables
-                int x3 = xFirstTile;
-                int y3 = yFirstTile;
-                
-                // Check if move is within the maximum tile distribution of the bottom left diagonal
-                for (int i = bottomLeftDiagonalMax; i > 0; i--) {
-                    // move to next diagonal tile
-                    x3 -= 1;
-                    y3 += 1;
-                    // if tile piece color is "NONE" then add x & y to tilePairs list.
-                    if (this.tile2DArray[x3 - 1][y3 - 1].getPieceColor() == "NONE") {
-                        tilePairs.add(x3);
-                        tilePairs.add(y3);
-                    // if tile piece color is the same as the current tile, stop adding tile to tilePairs list.
-                    } else if (this.tile2DArray[x3 - 1][y3 - 1].getPieceColor() == this.tile2DArray[xTileOne][yTileOne].getPieceColor()) {
-                        i = 0;
-                    // if tile piece color is different from the current tile, add x & y to tilePairs list and continue.
-                    } else if (this.tile2DArray[x3 - 1][y3 - 1].getPieceColor() != this.tile2DArray[xTileOne][yTileOne].getPieceColor()) {
-                        tilePairs.add(x3);
-                        tilePairs.add(y3);
-                        i = 0;
-                    } else {
-                        // no other possibility.
-                    }
-                }
-                // if selected tile (second tile) is within the tilePairs list, return true
-                for (int i = 0; i < tilePairs.size() - 1; i+=2) {
-                    if (xSecondTile == tilePairs.get(i) && ySecondTile == tilePairs.get(i + 1)) {  
-                        return true;
-                    }
-                }
-                // clear out tilePairs list for next diagonal check
-                tilePairs.clear();
-                
-                // setting first tile x and y to local variables
-                int x4 = xFirstTile;
-                int y4 = yFirstTile;
-                
-                // Check if move is within the maximum tile distribution of the bottom right diagonal
-                for (int i = bottomRightDiagonalMax; i > 0; i--) {
-                    // move to next diagonal tile
-                    x4 += 1;
-                    y4 += 1;
-                    // if tile piece color is "NONE" then add x & y to tilePairs list.
-                    if (this.tile2DArray[x4 - 1][y4 - 1].getPieceColor() == "NONE") {
-                        tilePairs.add(x4);
-                        tilePairs.add(y4);
-                    // if tile piece color is the same as the current tile, stop adding tile to tilePairs list.
-                    } else if (this.tile2DArray[x4 - 1][y4 - 1].getPieceColor() == this.tile2DArray[xTileOne][yTileOne].getPieceColor()) {
-                        i = 0;
-                    // if tile piece color is different from the current tile, add x & y to tilePairs list and continue.
-                    } else if (this.tile2DArray[x4 - 1][y4 - 1].getPieceColor() != this.tile2DArray[xTileOne][yTileOne].getPieceColor()) {
-                        tilePairs.add(x4);
-                        tilePairs.add(y4);
-                        i = 0;
-                    } else {
-                        // no other possibility.
-                    }
-                }
-                // if selected tile (second tile) is within the tilePairs list, return true
-                for (int i = 0; i < tilePairs.size() - 1; i+=2) {
-                    if (xSecondTile == tilePairs.get(i) && ySecondTile == tilePairs.get(i + 1)) {   
-                        return true;
-                    }
-                }
-                // clear out tilePairs list
-                tilePairs.clear();
-                
-                System.out.println("Failed due to: A bishop cannot move to this space.");
-                return false;
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-
             // if piece is a rook    
             } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 4) {
-                return true;
                 
+                return rook.canPieceMoveCheckmateCheck(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = rook.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                  
             // if piece is a queen    
             } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 5) {
-                return true;
+                
+                return queen.canPieceMoveCheckmateCheck(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = queen.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                
             // if piece is a king    
             } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 6) {
-                return true;
+                
+                return king.canPieceMoveCheckmateCheck(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = king.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                
             // if piece is a nothing    
             } else {
+                
                 return false;
-            }   
+            } 
+            
+            
         }
-        System.out.println("Failed due to: pieces are the same color!");
+        
+        
+        
+        
+        
+        
+        //System.out.println("Failed due to: pieces are the same color!");
         return false;
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public boolean pieceCanMove(int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
+        // This method will determine if a piece can move. If can return true, if cannot return false.
+        String firstColor = this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor();
+        String secondColor = this.tile2DArray[xSecondTile-1][ySecondTile-1].getPieceColor();
+        
+        
+        int xTileOne = xFirstTile - 1;
+        int yTileOne = yFirstTile - 1;
+        int xTileTwo = xSecondTile - 1;
+        int yTileTwo = ySecondTile - 1;
+        
+        //Boolean returnBoolean = Boolean.FALSE;
+        
+        // if second tile contains a king, return false;
+        if (tile2DArray[xTileTwo][yTileTwo].getPieceID() == 6) {
+            //System.out.println("Failed due to: you cannot capture a king!");
+            return false;
+        }
+        
+        
 
+        // if moving piece color is not the same as piece occupying tile being moved to.
+        if (!(this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor() == this.tile2DArray[xSecondTile-1][ySecondTile-1].getPieceColor())) {
+            
+            // if piece is a pawn 
+            if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 1) {
+                
+                return pawn.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = pawn.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                
+            // if piece is a knight
+            } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 2) {
+                
+                return knight.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = knight.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                
+            // if piece is a bishop    
+            } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 3) {
+                
+                return bishop.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = bishop.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                
+            // if piece is a rook    
+            } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 4) {
+                
+                return rook.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = rook.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                  
+            // if piece is a queen    
+            } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 5) {
+                
+                return queen.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = queen.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                
+            // if piece is a king    
+            } else if (this.tile2DArray[xTileOne][yTileOne].getPieceID() == 6) {
+                
+                return king.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                //returnBoolean = king.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile);
+                
+            // if piece is a nothing    
+            } else {
+                
+                return false;
+            }  
+            
+            
+        }
+        
+        //System.out.println("Failed due to: pieces are the same color!");
+        return false;
+    }
+    
     public void initializeBlankBoard(GridPane chessBoard) {
         int colorCount = 0;
         for (int x = 1; x <= 8; x++) {
@@ -778,7 +1345,8 @@ public class Board {
                 setButtonStyle(boardButton, colorCount, x);
                 colorCount++;
                 
-                Tile tile = new Tile(boardButton, x, y, assignPieceID(x, y), assignPieceColor(x, y));
+                Tile tile = new Tile(boardButton, x, y, assignPieceID(x, y), assignPieceColor(x, y), Boolean.FALSE, Boolean.FALSE, 
+                        Boolean.FALSE);
                 addTileToArray(tile, tile.getXCoordinate(), tile.getYCoordinate(), tile.getPieceID(), tile.getPieceColor());  
                
                 
@@ -788,6 +1356,7 @@ public class Board {
     }
     
     public void initializeStartingBoard(GridPane chessBoard) {
+        
         chessBoard.getChildren().clear();
         int colorCount = 0;
         for (int x = 1; x <= 8; x++) {
@@ -796,15 +1365,48 @@ public class Board {
                 setButtonStyle(boardButton, colorCount, x);
                 colorCount++;
                 
-                Tile tile = new Tile(boardButton, x, y, assignPieceID(x, y), assignPieceColor(x, y));
+                Tile tile = new Tile(boardButton, x, y, assignPieceID(x, y), assignPieceColor(x, y), Boolean.FALSE, Boolean.FALSE, 
+                        Boolean.FALSE);
                 addTileToArray(tile, tile.getXCoordinate(), tile.getYCoordinate(), tile.getPieceID(), tile.getPieceColor());
                 setTileGraphic(tile2DArray[x-1][y-1]);
                 
                 //System.out.println(x + ", " + y + ": " + tile2DArray[x-1][y-1]);
                 
                 chessBoard.add(tile2DArray[x-1][y-1].getTileButton(), x, y);
+                
+                
+                
             }
         }
+        
+        for (int x = 1; x <= 8; x++) {
+            for (int y = 1; y <= 8; y++) {
+                
+                // PLACE CHECK DANGER FOR EACH PIECE ON BOARD
+                if (tile2DArray[x-1][y-1].getPieceID() == 1) {
+                    pawn.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 2) {
+                    knight.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 3) {
+                    bishop.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 4) {
+                    rook.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 5) {
+                    queen.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                } else if (tile2DArray[x-1][y-1].getPieceID() == 6) {
+                    king.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
+                }
+            }
+        }
+        
+        king.setCheckStatus(false, "WHITE");
+        king.setCheckStatus(false, "BLACK");
+        king.setKingCheckmate(false, "WHITE");
+        king.setKingCheckmate(false, "BLACK");
+        king.setKingStalemate(false, "WHITE");
+        king.setKingStalemate(false, "BLACK");
+        king.setBlackKingHasMoved(false);
+        king.setWhiteKingHasMoved(false);
     }
     
     private ImageView getTileGraphic(Tile tile) {
@@ -953,25 +1555,9 @@ public class Board {
     }
     
     
-    /**
-    Bishop diagonal move calculation methods.
-    * These methods calculate the maximum number of tiles a bishop can transverse diagonally
-    */
-    public int topLeftTiles(int column, int row) {
-        return Math.min(row, column) - 1;
-    }
+
     
-    public int bottomLeftTiles(int column, int row) {
-        return 8 - Math.max(row, 9 - column);
-    }
-    
-    public int topRightTiles(int column, int row) {
-        return Math.min(row, 9 - column) - 1;
-    }
-    
-    public int bottomRightTiles(int column, int row) {
-        return 8 - Math.max(row, column);
-    }
+
     
     
     
