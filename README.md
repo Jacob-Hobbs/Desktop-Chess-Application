@@ -10,7 +10,11 @@ are used for piece interaction. Below, you will find examples of some of the mor
 
 ![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/check.gif)
 
-As pieces traverse the board, they emit a danger signal (matching their color) to Tiles located along the potential paths of their movement. Typically, this is inconsequential, except when it involves a king. Following any piece's movement, the game inspects the Tile objects holding each king to determine if there is an impending danger from an opponent piece. If this condition evaluates as true, the king is declared in check, and the available moves for the respective player are constrained to those that can move the king out of harm's way.
+As pieces traverse the board, they emit a danger signal (matching their color) to Tiles located along the potential paths of their movement:
+
+
+
+Typically, this is inconsequential, except when it involves a king. Following any piece's movement, the game inspects the Tile objects holding each king to determine if there is an impending danger from an opponent piece. If this condition evaluates as true, the king is declared in check, and the available moves for the respective player are constrained to those that can move the king out of harm's way.
 
 ### Checkmate Implementation 
 
