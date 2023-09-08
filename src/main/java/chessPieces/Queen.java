@@ -10,7 +10,6 @@ import javafx.scene.image.ImageView;
  * @author Jacob
  */
 public class Queen implements Piece {
-    
     private Bishop bishop;
     private Rook rook;
     private Boolean blackQueenHasMoved;
@@ -49,9 +48,7 @@ public class Queen implements Piece {
     public void setWhiteQueenHasMoved(Boolean trueOrFalse) {
         this.whiteQueenHasMoved = trueOrFalse;
     }
-    
-    
-    
+
     @Override  
     public ImageView getImageView(String color) {
         

@@ -17,8 +17,7 @@ public class Tile {
     private Boolean enPassantDanger;
     private Boolean checkDangerWhite;
     private Boolean checkDangerBlack;
-    
-    
+
     public Tile(Button button, int xCoordinate, int yCoordinate, int pieceOccupyID, String pieceColor, boolean enPassantDanger, boolean checkDangerWhite, 
             boolean checkDangerBlack) {
         this.button = button;

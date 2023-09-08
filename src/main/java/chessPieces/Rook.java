@@ -333,12 +333,7 @@ public class Rook implements Piece {
             tilePairs.clear();
         }
     }
-    
-    
-    
-    
-    
-    
+
     public Boolean getLeftBlackHasMoved() {
         return this.leftBlackHasMoved;
     }

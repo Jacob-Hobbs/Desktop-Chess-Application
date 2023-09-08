@@ -8,7 +8,6 @@ import chessPieces.Pawn;
 import chessPieces.Queen;
 import chessPieces.Rook;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -54,7 +53,6 @@ public class Board {
     
     
     public Board() {
-        this.button = button;
         this.rows = 8;
         this.columns = 8;
         this.pawn = new Pawn();
@@ -67,7 +65,6 @@ public class Board {
         this.chessBoard = new GridPane();
         this.tileList = new ArrayList<>();
         this.playerLabel = new Label("PLAYER:\n WHITE");
-        this.storedPieceID = storedPieceID;
         this.queenButton = new Button();
         this.rookButton = new Button();
         this.bishopButton = new Button();
@@ -194,13 +191,6 @@ public class Board {
         knightButton.setGraphic(image4);
         knightButton.setDisable(true);
     }
-    
-    public void empty2DArray(Tile[][] array) {
-        for (int i = 0; i < array.length; i++) {
-            Arrays.fill(array, null);
-        }
-    }
-    
 
     // updating to take paramter as to which 2d array it uses to 
     public void initializeUpdatedBoard() {
@@ -254,11 +244,6 @@ public class Board {
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
                 
-                //System.out.println("Tile: " + "(" + x + ", " + y + "): ");
-                //System.out.println("Black Danger: " + this.tile2DArray[x-1][y-1].getCheckDangerBlack());
-                //System.out.println("White Danger: " + this.tile2DArray[x-1][y-1].getCheckDangerWhite());
-                //System.out.println("****************************************************************");
-                
                 if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getPieceColor() == "WHITE") {
                     
                     //System.out.println("Tile: (" + x + ", " + y + ") checkDangerBlack = " + this.tile2DArray[x-1][y-1].getCheckDangerBlack());
@@ -285,13 +270,7 @@ public class Board {
                         
                             } 
                         }
-                        // SET CHECKMATE STATUS
-                        
-                        
-                        
-                        // THIS CAUSES A RUNTIME ERROR
-                        
-                        
+
                     } else if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getCheckDangerBlack() == Boolean.FALSE) {
                         // set the white check danger on this tile to false;
                         king.setCheckStatus(Boolean.FALSE, "WHITE");
@@ -335,11 +314,7 @@ public class Board {
                         
                             } 
                         }
-                        
-                        // SET CHECKMATE STATUS
-                        //checkForCheckmate("BLACK");
-                        
-                        
+
                     // if tile is a king and the king's white check danger is false...
                     } else if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getCheckDangerWhite() == Boolean.FALSE) {
                         // set the black check danger on this tile to false;
@@ -376,10 +351,7 @@ public class Board {
         int tilesChecked = 0;
         
         int canMoveTiles = 0;
-        
-        
-        
-        
+
         // For all tiles on board...
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
@@ -429,9 +401,7 @@ public class Board {
                                     canMoveTiles++;
 
                                 }
-                                
-                                
-                                        
+
                                 // CHANGE TILES BACK
                                     // update tile board
                                 tile2DArray[x-1][y-1].setPieceID(pieceID1);
@@ -449,14 +419,7 @@ public class Board {
       
                             } else {
                                 
-                                tilesChecked++;        
-                                
-                                
-                                
-                                
-                                
-                                
-
+                                tilesChecked++;
                             }    
                         }
                     }
@@ -465,11 +428,7 @@ public class Board {
                 }
                 
             }
-        }  
-        
-        
-        //System.out.println("tilesChecked: " + tilesChecked);
-        //System.out.println("canMoveTiles: " + canMoveTiles);
+        }
         
         if (king.getCheckStatus(playerColor) == Boolean.FALSE && canMoveTiles == 0) {
             king.setKingStalemate(true, playerColor);
@@ -478,31 +437,9 @@ public class Board {
         } else {
             // do nothing
         }
-        
-       
+
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     public int convertLayoutX(int x) {
         if (x == 3) {
             return 1;
@@ -547,7 +484,6 @@ public class Board {
         
         boardButton.setOnMouseClicked((event) -> {
             
-            
             if (this.tileList.isEmpty()) {
 
                 int xLayout = (int) boardButton.getLayoutX();
@@ -556,24 +492,16 @@ public class Board {
 
                 this.tileList.add(convertLayoutX(xLayout));
                 this.tileList.add(convertLayoutY(yLayout));
-                
-                
-                
 
             } else {
                 // Retrieves coordinates of first button from arraylist
                 int xCoor = this.tileList.get(0);
                 int yCoor = this.tileList.get(1);
-                
-                
-                
+
                 // Gets layoutX and layoutY from second button as int (3-458).
                 int xLayoutSecond = (int) boardButton.getLayoutX();
                 int yLayoutSecond = (int) boardButton.getLayoutY();
-                
-                
-                
-                
+
                 // IF PIECE CAN MOVE...
                 if (pieceCanMove(xCoor, yCoor, convertLayoutX(xLayoutSecond), convertLayoutY(yLayoutSecond)) 
                         && tile2DArray[xCoor-1][yCoor-1].getPieceColor() == player.getCurrentPlayer() && 
@@ -593,10 +521,7 @@ public class Board {
                     // Sets array pieceID and pieceColor of second button to that of the first button
                     tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1].setPieceID(tile2DArray[xCoor-1][yCoor-1].getPieceID());
                     tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1].setPieceColor(tile2DArray[xCoor-1][yCoor-1].getPieceColor());
-                    
-                    
-                    
-                    
+
                     // Sets array pieceID and pieceColor of first button to blank:
                     tile2DArray[xCoor-1][yCoor-1].setPieceID(0);
                     tile2DArray[xCoor-1][yCoor-1].setPieceColor("NONE");
@@ -604,22 +529,11 @@ public class Board {
                     
                     // Push pieces through and update tile check danger spots
                     initializeUpdatedBoard(); 
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+
                     //System.out.println("CURRENT PLAYER: " + player.getCurrentPlayer());
                     if (king.getCheckStatus(player.getCurrentPlayer()) == Boolean.FALSE) {
-                        
-                        
-                        // DO NOT REPEAT ABOVE CODE. KEEP tile2DArray CHANGES, DO THE EXTRA, AND UPDATE BOARD AGAIN!
-                        
-                        
+
+
                         // Set en passant settings
                         // If enPassantCount = 1, set enPassantCount back to 0 and for each tile on the board in en passant danger, set it to false.
                         if (this.enPassantCount == 1) {
@@ -641,11 +555,7 @@ public class Board {
                                 }   
                             }
                         }
-                    
 
-                    
-                    
-                    
                         // FINAL RETURN TRUE
                         int promotionAlert = 0;
                     
@@ -665,8 +575,7 @@ public class Board {
                                 // add to white 
                                 promotionAlert = 1;
                             }
-                        
-                        
+
                         // FINAL RETURN TRUE    
                         initializeUpdatedBoard();  
    
@@ -782,31 +691,12 @@ public class Board {
                         setTileGraphic(tile2DArray[convertLayoutX(xLayoutSecond)-1][convertLayoutY(yLayoutSecond)-1]);
                     
                         // Push pieces through and update tile check danger spots
-                        initializeUpdatedBoard(); 
-                        
-                        
-                        // do nothing, moving piece has failed. 
-                
-                        // ########################################### CONCERN #########################
-                        
-            
-                        
-            
-                        // ########################################### CONCERN #########################
-                
-                
-                
-                
-                
-                
+                        initializeUpdatedBoard();
                 
                     }
-                    
-                    
- 
+
                 }
-                
-                
+
                 // FINAL RETURN TRUE
                 //Clear list so first button can collect coordinates. 
                 this.tileList.clear();
@@ -831,59 +721,14 @@ public class Board {
                     
                 }
             }
-            
-            
-            //System.out.println("Black King: (" + blackKingX + ", " + blackKingY + ")");
-            //System.out.println("White King: (" + whiteKingX + ", " + whiteKingY + ")");
-            
-            
+
             if (king.getCheckStatus(player.getCurrentPlayer()) == Boolean.TRUE) {
                 checkForCheckmate(player.getCurrentPlayer());
             } 
-            
-            
-            // PROBLEM WITH STALEMATE DOES NOT LIE IN kingCanMove. IT LIES IN checkForCheckmate()...
-            //if (player.getCurrentPlayer() == "WHITE") {
-                //if (king.getCheckStatus("WHITE") == Boolean.FALSE && king.kingCanMove(tile2DArray, whiteKingX, whiteKingY) == Boolean.FALSE) {
-                    //checkForCheckmate("WHITE");
-                //}
-            //} else if (player.getCurrentPlayer() == "BLACK") {
-               //if (king.getCheckStatus("BLACK") == Boolean.FALSE && king.kingCanMove(tile2DArray, blackKingX, blackKingY) == Boolean.FALSE) {
-                    //checkForCheckmate("BLACK");
-                //}
-            //}
-            
-            
-            
-            // ###############################    
-            //  NEED TO CHECK FOR STALEMATE
-            // ############################### 
-            
 
-            
-            
-            // ADDING THIS AS EXTRA
             initializeUpdatedBoard();
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
         });
+
         boardButton.setMinHeight(65);
         boardButton.setMaxHeight(65);
         boardButton.setMinWidth(65);
@@ -984,9 +829,7 @@ public class Board {
                 knightButton.setGraphic(image4);
                 playerLabel.setText("PLAYER: \n BLACK");
             }
-            
-            
-            
+
             tile2DArray[xTile][yTile].setPieceColor(copyColor);
             tile2DArray[xTile][yTile].setPieceID(5);
             initializeUpdatedBoard();
@@ -1180,7 +1023,6 @@ public class Board {
         String firstColor = this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor();
         String secondColor = this.tile2DArray[xSecondTile-1][ySecondTile-1].getPieceColor();
         
-        
         int xTileOne = xFirstTile - 1;
         int yTileOne = yFirstTile - 1;
         int xTileTwo = xSecondTile - 1;
@@ -1195,8 +1037,6 @@ public class Board {
         }
         
         Boolean returnBoolean = Boolean.FALSE;
-        
-        
 
         // if moving piece color is not the same as piece occupying tile being moved to.
         if (!(this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor() == this.tile2DArray[xSecondTile-1][ySecondTile-1].getPieceColor())) {
@@ -1241,29 +1081,12 @@ public class Board {
             } else {
                 
                 return false;
-            } 
-            
-            
+            }
         }
-        
-        
-        
-        
-        
-        
         //System.out.println("Failed due to: pieces are the same color!");
         return false;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     public boolean pieceCanMove(int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         // This method will determine if a piece can move. If can return true, if cannot return false.
         String firstColor = this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor();
@@ -1282,8 +1105,6 @@ public class Board {
             //System.out.println("Failed due to: you cannot capture a king!");
             return false;
         }
-        
-        
 
         // if moving piece color is not the same as piece occupying tile being moved to.
         if (!(this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor() == this.tile2DArray[xSecondTile-1][ySecondTile-1].getPieceColor())) {
@@ -1328,9 +1149,7 @@ public class Board {
             } else {
                 
                 return false;
-            }  
-            
-            
+            }
         }
         
         //System.out.println("Failed due to: pieces are the same color!");
@@ -1373,8 +1192,6 @@ public class Board {
                 //System.out.println(x + ", " + y + ": " + tile2DArray[x-1][y-1]);
                 
                 chessBoard.add(tile2DArray[x-1][y-1].getTileButton(), x, y);
-                
-                
                 
             }
         }
@@ -1508,7 +1325,6 @@ public class Board {
             tile.getTileButton().setGraphic(image);
         }
 
-   
     }
     
     public String assignPieceColor(int x, int y) {

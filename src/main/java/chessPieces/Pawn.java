@@ -37,10 +37,7 @@ public class Pawn implements Piece {
             }
         }
     }
-    
-    
-   
-    
+
     @Override
     public ImageView getImageView(String color) {
         
@@ -54,8 +51,7 @@ public class Pawn implements Piece {
         }
         return image;
     }
-    
-    
+
     @Override
     public boolean canPieceMove(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         
@@ -63,9 +59,7 @@ public class Pawn implements Piece {
         int yTileOne = yFirstTile - 1;
         int xTileTwo = xSecondTile - 1;
         int yTileTwo = ySecondTile - 1;
-        
-        
-        
+
         // if pawn is white
         if (tile2DArray[xTileOne][yTileOne].getPieceColor() == "WHITE") {   
             // if pawn is in white starting position (y = 7)
@@ -339,9 +333,7 @@ public class Pawn implements Piece {
         int yTileOne = yFirstTile - 1;
         int xTileTwo = xSecondTile - 1;
         int yTileTwo = ySecondTile - 1;
-        
-        
-        
+
         // if pawn is white
         if (tile2DArray[xTileOne][yTileOne].getPieceColor() == "WHITE") {   
             // if pawn is in white starting position (y = 7)
@@ -561,8 +553,5 @@ public class Pawn implements Piece {
         //System.out.println("Failed due to: unmet condition.");
         return false;
     }
-    
-    
-    
     
 }

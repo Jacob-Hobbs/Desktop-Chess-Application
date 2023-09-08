@@ -43,26 +43,7 @@ public class King implements Piece {
     }
     
     public void setCheckDangerTile(Tile[][] tile2DArray, int x1, int y1, String color) {
-        
-        /**
-        //1
-        tile2DArray[(x1-1)][(y1-1) - 1].setCheckDangerWhite(Boolean.TRUE);
-        //2
-        tile2DArray[(x1-1) + 1][(y1-1) - 1].setCheckDangerWhite(Boolean.TRUE);
-        //3
-        tile2DArray[(x1-1) + 1][(y1-1)].setCheckDangerWhite(Boolean.TRUE);
-        //4
-        tile2DArray[(x1-1) + 1][(y1-1) + 1].setCheckDangerWhite(Boolean.TRUE);
-        //5
-        tile2DArray[(x1-1)][(y1-1) + 1].setCheckDangerWhite(Boolean.TRUE);
-        //6
-        tile2DArray[(x1-1) - 1][(y1-1) + 1].setCheckDangerWhite(Boolean.TRUE);
-        //7
-        tile2DArray[(x1-1) - 1][(y1-1)].setCheckDangerWhite(Boolean.TRUE);
-        //8
-        tile2DArray[(x1-1) - 1][(y1-1) - 1].setCheckDangerWhite(Boolean.TRUE);
-        **/  
-        
+
         if (color.equals("WHITE")) {
             
             if (x1 == 1 && y1 == 1) {
@@ -119,9 +100,7 @@ public class King implements Piece {
                 tile2DArray[(x1-1) - 1][(y1-1)].setCheckDangerWhite(Boolean.TRUE);
                 tile2DArray[(x1-1) - 1][(y1-1) - 1].setCheckDangerWhite(Boolean.TRUE);
         }
-            
-            
-            
+
         } else if (color.equals("BLACK")) {
             
             if (x1 == 1 && y1 == 1) {
@@ -181,9 +160,7 @@ public class King implements Piece {
             
         }
     }
-    
-    
-    
+
     public Boolean getBlackKingHasMoved() {
         return this.blackKingHasMoved;
     }

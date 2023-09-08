@@ -39,10 +39,7 @@ public class Bishop implements Piece {
             int topRightDiagonalMax = getTopRightTiles(xFirstTile, yFirstTile);
             int bottomLeftDiagonalMax = getBottomLeftTiles(xFirstTile, yFirstTile);
             int bottomRightDiagonalMax = getBottomRightTiles(xFirstTile, yFirstTile);
-            
-            
-            
-                
+
             // setting first tile x and y to local variables
             int x = xFirstTile;
             int y = yFirstTile;
@@ -103,8 +100,7 @@ public class Bishop implements Piece {
             }
             // if selected tile (second tile) is within the tilePairs list, return true
             for (int i = 0; i < tilePairs.size() - 1; i+=2) {
-                // THROWING ERROR
-                // > OUT OF BOUNDS ERROR????
+
                 //System.out.println(tilePairs.get(i) + ", " + tilePairs.get(i + 1));
                 tile2DArray[(tilePairs.get(i)) - 1][(tilePairs.get(i + 1)) - 1].setCheckDangerWhite(Boolean.TRUE);
             }
@@ -254,8 +250,6 @@ public class Bishop implements Piece {
             }
             // if selected tile (second tile) is within the tilePairs list, return true
             for (int i = 0; i < tilePairs.size() - 1; i+=2) {
-                // THROWING ERROR
-                // > OUT OF BOUNDS ERROR????
                 //System.out.println(tilePairs.get(i) + ", " + tilePairs.get(i + 1));
                 tile2DArray[(tilePairs.get(i)) - 1][(tilePairs.get(i + 1)) - 1].setCheckDangerBlack(Boolean.TRUE);
             }
