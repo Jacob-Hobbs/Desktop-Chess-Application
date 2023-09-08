@@ -3,7 +3,8 @@ This Java Desktop Chess Application is a feature-rich, interactive, and visually
 
 ## Highlighted Features
 
-An in-depth paragraph about your project and overview of use.
+In order to facilitate the logic of chess, Tile objects are organized within an 8 x 8 two-dimensional array. These Tile objects are composed of various parameters that track the current position and status of the chess pieces, as well as the JavaFX buttons that 
+are used for piece interaction. Below, you will find examples of some of the more challenging features implemented in this project.
 
 ### Checkmate Implementation 
 
