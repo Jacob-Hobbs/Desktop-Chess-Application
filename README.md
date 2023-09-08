@@ -4,11 +4,13 @@ This Java Desktop Chess Application is a feature-rich, interactive, and visually
 ## Highlighted Features
 
 In order to facilitate the logic of chess, Tile objects are organized within an 8 x 8 two-dimensional array. These Tile objects are composed of various parameters that track the current position and status of the chess pieces, as well as the JavaFX buttons that 
-are used for piece interaction. Below, you will find examples of some of the more challenging features implemented in this project.
+are used for piece interaction. Below, you will find examples of some of the more challenging features implemented in this project:
 
 ### Checkmate Implementation 
 
 ![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/checkmate.gif)
+
+As pieces traverse the board, they emit a danger signal (matching their color) to Tiles located along the potential paths of their movement. Typically, this is inconsequential, except when it involves a king. Following any piece's movement, the game inspects the Tile objects holding each king to determine if there is an impending danger from an opponent piece. If this condition evaluates as true, the king is declared in check, and the available moves for the respective player are constrained to those that can move the king out of harm's way.
 
 ### Check Implementation 
 
