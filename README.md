@@ -39,6 +39,8 @@ A pawn can advance two squares forward from its starting row. If an opposing paw
 
 ![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/promotion.gif)
 
+When a pawn advances to the opposite side of the board, the pawn can be promoted to that of a Queen, Rook, Bishop, or Knight. This selection is made possible by the row of buttons on the menu above the game board. 
+
 ## Getting Started
 
 ### Dependencies
@@ -66,12 +68,12 @@ Any advise for common problems or issues.
 command to run if program contains helper info
 ```
 
-## Authors
+## Author
 
-Contributors names and contact info
+Author can be contacted via the following link:
 
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
+[Jacob Hobbs](https://www.linkedin.com/in/jacobrayhobbs/)
+
 
 ## Version History
 
