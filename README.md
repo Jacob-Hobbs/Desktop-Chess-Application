@@ -5,6 +5,8 @@ This Java Desktop Chess Application is a feature-rich, interactive, and visually
 
 An in-depth paragraph about your project and overview of use.
 
+### Checkmate Implementation 
+
 ## Getting Started
 
 ### Dependencies
