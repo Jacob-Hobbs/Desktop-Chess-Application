@@ -22,6 +22,13 @@ If the moveset of the checked king's player cannot resolve the check condition t
 
 ![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/castling.gif)
 
+King and Rook objects implement the Piece interface, as do all "Piece" objects, however these specific pieces maintain logical declarations of movement, specific to each game. The moveset of a player contains the possibility of castling the king
+if and only if:
+* The participating rook has not moved
+* The participating king has not moved
+* All tiles between the participating king/rook are free
+* The King may not castle out of, through, or into check.
+
 ### En Passant Implementation 
 
 ![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/enPassant.gif)
