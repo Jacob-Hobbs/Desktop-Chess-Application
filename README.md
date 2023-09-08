@@ -7,6 +7,8 @@ An in-depth paragraph about your project and overview of use.
 
 ### Checkmate Implementation 
 
+![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/checkmate.gif)
+
 ## Getting Started
 
 ### Dependencies
