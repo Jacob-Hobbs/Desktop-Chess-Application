@@ -8,23 +8,25 @@ are used for piece interaction. Below, you will find examples of some of the mor
 
 ### Check Implementation 
 
-![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/check.gif)
+
+<img src="https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/check.gif" width="375">
+
 
 As pieces traverse the board, they emit a danger signal (matching their color) to Tiles located along the potential paths of their movement:
 
-
+<img src="https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/smallchessboard.png" width="350">
 
 Typically, this is inconsequential, except when it involves a king. Following any piece's movement, the game inspects the Tile objects holding each king to determine if there is an impending danger from an opponent piece. If this condition evaluates as true, the king is declared in check, and the available moves for the respective player are constrained to those that can move the king out of harm's way.
 
 ### Checkmate Implementation 
 
-![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/checkmate.gif)
+<img src="https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/checkmate.gif" width="375">
 
 If the moveset of the checked king's player cannot resolve the check condition to false, checkmate is declared and the attacking player is declared the winner. All buttons contained within the Tile objects are then disabled, discouraging any additional piece maneuvers.
 
 ### Castling Implementation 
 
-![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/castling.gif)
+<img src="https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/castling.gif" width="375">
 
 King and Rook objects implement the Piece interface, as do all "Piece" objects, however these specific pieces maintain logical declarations of movement, specific to each game. The moveset of a player contains the possibility of castling the king
 if and only if:
@@ -35,13 +37,13 @@ if and only if:
 
 ### En Passant Implementation 
 
-![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/enPassant.gif)
+<img src="https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/enPassant.gif" width="375">
 
 A pawn can advance two squares forward from its starting row. If an opposing pawn stands on an adjacent square, it has the unique opportunity, on the next move only, to move diagonally forward and capture the advancing pawn. This distinctive capture rule is referred to as "en passant," a term derived from the French phrase meaning "in passing."
 
 ### Promotion Implementation 
 
-![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/promotion.gif)
+<img src="https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/promotion.gif" width="375">
 
 When a pawn advances to the opposite side of the board, the pawn can be promoted to that of a Queen, Rook, Bishop, or Knight. This selection is made possible by the row of buttons on the menu above the game board. 
 
