@@ -1,13 +1,29 @@
 # ♚♛♜♝♞ Desktop-Chess-Application ♘♗♖♕♔
 This Java Desktop Chess Application is a feature-rich, interactive, and visually appealing chess game designed and developed using JavaFX and following the principles of Object-Oriented programming (OOP). This application provides a seamless and enjoyable chess-playing experience for both novice and experienced players.
 
-## Description
+## Highlighted Features
 
 An in-depth paragraph about your project and overview of use.
 
 ### Checkmate Implementation 
 
 ![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/checkmate.gif)
+
+### Check Implementation 
+
+![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/check.gif)
+
+### Castling Implementation 
+
+![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/castling.gif)
+
+### En Passant Implementation 
+
+![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/enPassant.gif)
+
+### Promotion Implementation 
+
+![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/promotion.gif)
 
 ## Getting Started
 
