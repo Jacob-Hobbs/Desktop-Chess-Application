@@ -45,8 +45,9 @@ When a pawn advances to the opposite side of the board, the pawn can be promoted
 
 ### Dependencies
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
+* Compatible with Windows 10
+* Java JDK 17.0.8 [(Download)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+* JavaFX SDK 18.0.1 [(Download)](https://gluonhq.com/products/javafx/)
 
 ### Installing
 
