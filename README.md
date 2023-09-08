@@ -33,6 +33,8 @@ if and only if:
 
 ![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/enPassant.gif)
 
+A pawn can advance two squares forward from its starting row. If an opposing pawn stands on an adjacent square, it has the unique opportunity, on the next move only, to move diagonally forward and capture the advancing pawn. This distinctive capture rule is referred to as "en passant," a term derived from the French phrase meaning "in passing."
+
 ### Promotion Implementation 
 
 ![](https://github.com/Jacob-Hobbs/Desktop-Chess-Application/blob/master/chessGIFs/promotion.gif)
