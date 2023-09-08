@@ -49,26 +49,15 @@ When a pawn advances to the opposite side of the board, the pawn can be promoted
 * Java JDK 17.0.8 [(Download)](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 * JavaFX SDK 18.0.1 [(Download)](https://gluonhq.com/products/javafx/)
 
-### Installing
+### Installation and Execution
 
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+1. Install the above listed dependencies.
+1. Download the _chess.jar_ file from the master branch.
+1. Run the _chess.jar_ file on your local machine.
 
-### Executing program
 
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
-
-## Help
-
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
-
+> Java Runtime Environment must be installed correctly in order for the _chess.jar_ file to execute.
+  
 ## Author
 
 Author can be contacted via the following link:
