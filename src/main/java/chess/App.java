@@ -4,7 +4,9 @@ package chess;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
-
+/**
+ * App class overrides the start method and launches the chess application at runtime.
+ * */
 public class App extends Application {
 
     @Override
