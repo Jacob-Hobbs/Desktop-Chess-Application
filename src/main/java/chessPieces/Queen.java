@@ -15,14 +15,20 @@ public class Queen implements Piece {
     private Rook rook;
     private Boolean blackQueenHasMoved;
     private Boolean whiteQueenHasMoved;
-    
+
+    /**
+     * Queen constructor.
+     * */
     public Queen() {
         this.bishop = new Bishop();
         this.rook = new Rook();
         this.blackQueenHasMoved = false;
         this.whiteQueenHasMoved = false;
     }
-    
+
+    /**
+     * setCheckDangerTile method used to set corresponding danger boolean for pieces after queen moves.
+     * */
      public void setCheckDangerTile(Tile[][] tile2DArray, int x, int y, String color) {
         
         if (color.equals("WHITE")) {
@@ -33,23 +39,38 @@ public class Queen implements Piece {
             rook.setCheckDangerTile(tile2DArray, x, y, color);
         }
     }
-    
+
+    /**
+     * getBlackQueenHasMoved gets boolean for black queen movement.
+     * */
     public Boolean getBlackQueenHasMoved() {
         return this.blackQueenHasMoved;
     }
-    
+
+    /**
+     * setBlackQueenHasMoved sets boolean for black queen movement.
+     * */
     public void setBlackQueenHasMoved(Boolean trueOrFalse) {
         this.blackQueenHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getWhiteQueenHasMoved gets boolean for white queen movement.
+     * */
     public Boolean getWhiteQueenHasMoved() {
         return this.whiteQueenHasMoved;
     }
-    
+
+    /**
+     * setWhiteQueenHasMoved sets boolean for white queen movement.
+     * */
     public void setWhiteQueenHasMoved(Boolean trueOrFalse) {
         this.whiteQueenHasMoved = trueOrFalse;
     }
 
+    /**
+     * getImageView method retrieves image view of black/white queen sprite.
+     * */
     @Override  
     public ImageView getImageView(String color) {
         
@@ -63,7 +84,11 @@ public class Queen implements Piece {
         }
         return image;
     }
-    
+
+    /**
+     * canPieceMove method checks if movement is valid for a queen type.
+     * Exceptions are manually handled through program logic.
+     * */
     @Override
     public boolean canPieceMove(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
     
@@ -82,7 +107,11 @@ public class Queen implements Piece {
         return false;
         
     }
-    
+
+    /**
+     * canPieceMoveCheckmateCheck method is specific method that determines if queen can move to prevent King
+     * checkmate/check scenario.
+     * */
     public boolean canPieceMoveCheckmateCheck(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
     
         if (bishop.canPieceMove(tile2DArray, xFirstTile, yFirstTile, xSecondTile, ySecondTile) || 

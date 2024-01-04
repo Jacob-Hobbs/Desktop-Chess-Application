@@ -26,7 +26,10 @@ public class King implements Piece {
     private Boolean blackKingStalemate;
     
     private Rook rook;
-    
+
+    /**
+     * King constructor.
+     * */
     public King() {
         this.whiteKingInCheck = false;
         this.blackKingInCheck = false;
@@ -42,7 +45,10 @@ public class King implements Piece {
         
         this.rook = new Rook();
     }
-    
+
+    /**
+     * setCheckDangerTile method used to set corresponding danger boolean for pieces after king moves.
+     * */
     public void setCheckDangerTile(Tile[][] tile2DArray, int x1, int y1, String color) {
 
         if (color.equals("WHITE")) {
@@ -162,22 +168,37 @@ public class King implements Piece {
         }
     }
 
+    /**
+     * Getter method to determine if black king has moved for castling purposes.
+     * */
     public Boolean getBlackKingHasMoved() {
         return this.blackKingHasMoved;
     }
-    
+
+    /**
+     * Setter method to determine if black king has moved for castling purposes.
+     * */
     public void setBlackKingHasMoved(Boolean trueOrFalse) {
         this.blackKingHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * Getter method to determine if white king has moved for castling purposes.
+     * */
     public Boolean getWhiteKingHasMoved() {
         return this.whiteKingHasMoved;
     }
-    
+
+    /**
+     * Setter method to determine if white king has moved for castling purposes.
+     * */
     public void setWhiteKingHasMoved(Boolean trueOrFalse) {
         this.whiteKingHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getImageView method retrieves image view of black/white king sprite.
+     * */
     @Override
     public ImageView getImageView(String color) {
         
@@ -191,7 +212,10 @@ public class King implements Piece {
         }
         return image;
     }
-    
+
+    /**
+     * Setter method for check status of king.
+     * */
     public void setCheckStatus(boolean trueOrFalse, String kingColor) {
         if (kingColor == "WHITE") {
             this.whiteKingInCheck = trueOrFalse;
@@ -199,7 +223,10 @@ public class King implements Piece {
             this.blackKingInCheck = trueOrFalse;
         }
     }
-    
+
+    /**
+     * Getter method for check status of king.
+     * */
     public boolean getCheckStatus(String kingColor) {
         
         if (kingColor == "WHITE") {
@@ -210,7 +237,10 @@ public class King implements Piece {
         
         return false;
     }
-    
+
+    /**
+     * Getter method for checkmate status of king.
+     * */
     public boolean getKingCheckmate(String kingColor) {
         if (kingColor == "WHITE") {
             return this.whiteKingCheckmate;
@@ -219,7 +249,10 @@ public class King implements Piece {
         }
         return false;
     }
-    
+
+    /**
+     * Setter method for checkmate status of king.
+     * */
     public void setKingCheckmate(boolean trueOrFalse, String kingColor) {
         if (kingColor == "WHITE") {
             this.whiteKingCheckmate = trueOrFalse;
@@ -227,7 +260,10 @@ public class King implements Piece {
             this.blackKingCheckmate = trueOrFalse;
         }
     }
-    
+
+    /**
+     * Getter method for stalemate status of king.
+     * */
     public boolean getKingStalemate(String kingColor) {
         if (kingColor == "WHITE") {
             return this.whiteKingStalemate;
@@ -236,7 +272,10 @@ public class King implements Piece {
         }
         return false;
     }
-    
+
+    /**
+     * Setter method for stalemate status of king.
+     * */
     public void setKingStalemate(boolean trueOrFalse, String kingColor) {
         if (kingColor == "WHITE") {
             this.whiteKingStalemate = trueOrFalse;
@@ -244,46 +283,11 @@ public class King implements Piece {
             this.blackKingStalemate = trueOrFalse;
         }
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+    /**
+     * canPieceMove method checks if movement is valid for a king type.
+     * Exceptions are manually handled through program logic.
+     * */
     @Override
     public boolean canPieceMove(Tile[][] tile2DArray, int x1, int y1, int x2, int y2) {
     
@@ -371,10 +375,7 @@ public class King implements Piece {
             
             returnNum += -1;
         }
-        
-        
-        
-        
+
         if (x1 == 1 && y1 == 1) {
             returnNum =+ moveThree + moveFour + moveFive;
         } else if ((x1 == 1 && y1 == 2) || (x1 == 1 && y1 == 3) || (x1 == 1 && y1 == 4) ||
@@ -415,7 +416,10 @@ public class King implements Piece {
         return false;
     
     }
-    
+
+    /**
+     * The below methods define the 8 possible moves of a king piece type.
+     * */
     private int kingMoveOne(int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         
         if (xSecondTile == (xFirstTile) && ySecondTile == (yFirstTile - 1)) {
@@ -479,7 +483,11 @@ public class King implements Piece {
         }
         return 0;
     }
-    
+
+    /**
+     * canPieceMoveCheckmateCheck method is specific method that determines if king can move to prevent itself
+     * from entering checkmate/check scenario.
+     * */
     public boolean canPieceMoveCheckmateCheck(Tile[][] tile2DArray, int x1, int y1, int x2, int y2) {
     
         int returnNum = 0;
@@ -534,10 +542,7 @@ public class King implements Piece {
             
             returnNum += -1;
         }
-        
-        
-        
-        
+
         if (x1 == 1 && y1 == 1) {
             returnNum =+ moveThree + moveFour + moveFive;
         } else if ((x1 == 1 && y1 == 2) || (x1 == 1 && y1 == 3) || (x1 == 1 && y1 == 4) ||
@@ -571,104 +576,5 @@ public class King implements Piece {
         return false;
     
     }
-    
-    public boolean kingCanMove(Tile[][] tile2DArray, int x1, int y1) {
-        
-        String playerColor = tile2DArray[x1-1][y1-1].getPieceColor();
-        
-        //int moveOne = kingMoveCheckForStalemate(tile2DArray, x1, y1-1, playerColor);
-        //int moveTwo = kingMoveCheckForStalemate(tile2DArray, x1+1, y1-1, playerColor);
-        //int moveThree = kingMoveCheckForStalemate(tile2DArray, x1+1, y1, playerColor);
-        //int moveFour = kingMoveCheckForStalemate(tile2DArray, x1+1, y1+1, playerColor);
-        //int moveFive = kingMoveCheckForStalemate(tile2DArray, x1, y1+ 1, playerColor);
-        //int moveSix = kingMoveCheckForStalemate(tile2DArray, x1-1, y1+1, playerColor);
-        //int moveSeven = kingMoveCheckForStalemate(tile2DArray, x1-1, y1, playerColor);
-        //int moveEight = kingMoveCheckForStalemate(tile2DArray, x1-1, y1-1, playerColor);
-    
-        int returnNum = 0;
-        
-        
-        if (x1 == 1 && y1 == 1) {
-            returnNum =+ kingMoveCheckForStalemate(tile2DArray, x1+1, y1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1+1, y1+1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1, y1+ 1, playerColor);
 
-        } else if ((x1 == 1 && y1 == 2) || (x1 == 1 && y1 == 3) || (x1 == 1 && y1 == 4) ||
-                (x1 == 1 && y1 == 5) || (x1 == 1 && y1 == 6) || (x1 == 1 && y1 == 7)) {
-            returnNum += kingMoveCheckForStalemate(tile2DArray, x1, y1-1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1+1, y1-1, playerColor) + 
-                    kingMoveCheckForStalemate(tile2DArray, x1+1, y1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1+1, y1+1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1, y1+ 1, playerColor);
-            
-        } else if (x1 == 1 && y1 == 8) {
-            returnNum += kingMoveCheckForStalemate(tile2DArray, x1, y1-1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1+1, y1-1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1+1, y1, playerColor);
-            
-        } else if ((x1 == 2 && y1 == 8) || (x1 == 3 && y1 == 8) || (x1 == 4 && y1 == 8) ||
-                (x1 == 5 && y1 == 8) || (x1 == 6 && y1 == 8) || (x1 == 7 && y1 == 8)) {
-            returnNum += kingMoveCheckForStalemate(tile2DArray, x1, y1-1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1+1, y1-1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1+1, y1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1-1, y1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1-1, y1-1, playerColor);
-            
-        } else if (x1 == 8 && y1 == 8) {
-            returnNum += kingMoveCheckForStalemate(tile2DArray, x1, y1-1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1-1, y1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1-1, y1-1, playerColor);
-            
-        } else if ((x1 == 8 && y1 == 2) || (x1 == 8 && y1 == 3) || (x1 == 8 && y1 == 4) ||
-                (x1 == 8 && y1 == 5) || (x1 == 8 && y1 == 6) || (x1 == 8 && y1 == 7)) {
-            returnNum += kingMoveCheckForStalemate(tile2DArray, x1, y1-1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1, y1+ 1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1-1, y1+1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1-1, y1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1-1, y1-1, playerColor);
-
-        } else if (x1 == 8 && y1 == 1) {
-            returnNum += kingMoveCheckForStalemate(tile2DArray, x1, y1+ 1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1-1, y1+1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1-1, y1, playerColor);
-            
-        } else if ((x1 == 2 && y1 == 1) || (x1 == 3 && y1 == 1) || (x1 == 4 && y1 == 1) ||
-                (x1 == 5 && y1 == 1) || (x1 == 6 && y1 == 1) || (x1 == 7 && y1 == 1)) {
-            returnNum += kingMoveCheckForStalemate(tile2DArray, x1+1, y1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1+1, y1+1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1, y1+ 1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1-1, y1+1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1-1, y1, playerColor);
-            
-        } else {
-            returnNum += kingMoveCheckForStalemate(tile2DArray, x1, y1-1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1+1, y1-1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1+1, y1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1+1, y1+1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1, y1+ 1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1-1, y1+1, playerColor) +
-                    kingMoveCheckForStalemate(tile2DArray, x1-1, y1, playerColor) + kingMoveCheckForStalemate(tile2DArray, x1-1, y1-1, playerColor);
-            
-        }
-        
-        if (returnNum <= -1) {
-            
-            return true;
-        }
-        //System.out.println("Failed due to: outside king moveset");
-        return false;
-    
-    }
-    
-    private int kingMoveCheckForStalemate(Tile[][] tile2DArray, int x2, int y2, String playerColor) {
-        
-        int returnNum = 0;
-        
-        if (playerColor == "BLACK") {
-            
-            if (tile2DArray[x2 - 1][y2 - 1].getPieceColor() == "BLACK") {
-                returnNum = 0;
-            } else if (tile2DArray[x2 - 1][y2 - 1].getCheckDangerWhite() == Boolean.TRUE) {
-                returnNum = 0;
-            } else {
-                returnNum = -1;
-            }
-        } else if (playerColor == "WHITE") {
-            if (tile2DArray[x2 - 1][y2 - 1].getPieceColor() == "WHITE") {
-                returnNum = 0;
-            } else if (tile2DArray[x2 - 1][y2 - 1].getCheckDangerBlack() == Boolean.TRUE) {
-                returnNum = 0;
-            } else {
-                returnNum = -1;
-            }
-        }
-        return returnNum;
-   
-    }
-    
 }

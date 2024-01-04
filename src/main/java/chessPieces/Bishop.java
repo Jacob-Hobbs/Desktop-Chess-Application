@@ -17,14 +17,20 @@ public class Bishop implements Piece {
     private Boolean rightBlackHasMoved;
     private Boolean leftWhiteHasMoved;
     private Boolean rightWhiteHasMoved;
-    
+
+    /**
+     * Bishop constructor.
+     * */
     public Bishop() {
         this.leftBlackHasMoved = false;
         this.rightBlackHasMoved = false;
         this.leftWhiteHasMoved = false;
         this.rightWhiteHasMoved = false;
     }
-    
+
+    /**
+     * setCheckDangerTile method used to set corresponding danger boolean for pieces after bishop moves.
+     * */
     public void setCheckDangerTile(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, String color) {
         
         if (color.equals("WHITE")) {
@@ -323,39 +329,66 @@ public class Bishop implements Piece {
             
         }
     }
-    
+
+    /**
+     * getLeftBlackHasMoved getter method for left black bishop movement.
+     * */
     public Boolean getLeftBlackHasMoved() {
         return this.leftBlackHasMoved;
     }
-    
+
+    /**
+     * setLeftBlackHasMoved setter method for left black bishop movement.
+     * */
     public void setLeftBlackHasMoved(Boolean trueOrFalse) {
         this.leftBlackHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getRightBlackHasMoved getter method for right black bishop movement.
+     * */
     public Boolean getRightBlackHasMoved() {
         return this.rightBlackHasMoved;
     }
-    
+
+    /**
+     * setRightBlackHasMoved setter method for right black bishop movement.
+     * */
     public void setRightBlackHasMoved(Boolean trueOrFalse) {
         this.rightBlackHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getLeftWhiteHasMoved getter method for left white bishop movement.
+     * */
     public Boolean getLeftWhiteHasMoved() {
         return this.leftWhiteHasMoved;
     }
-    
+
+    /**
+     * setLeftWhiteHasMoved setter method for left white bishop movement.
+     * */
     public void setLeftWhiteHasMoved(Boolean trueOrFalse) {
         this.leftWhiteHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getRightWhiteHasMoved getter method for right white bishop movement.
+     * */
     public Boolean getRightWhiteHasMoved() {
         return this.rightWhiteHasMoved;
     }
-    
+
+    /**
+     * setRightWhiteHasMoved setter method for right white bishop movement.
+     * */
     public void setRightWhiteHasMoved(Boolean trueOrFalse) {
         this.rightWhiteHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * checkForMovement method actually tracks bishop movement for castling potential.
+     * */
     public void checkForMovement(int x, int y) {
         // if left black bishop has moved, note that it has moved
         if (x == 3 && y == 1) {
@@ -374,7 +407,10 @@ public class Bishop implements Piece {
             setRightWhiteHasMoved(true);
         }
     }
-    
+
+    /**
+     * getImageView method retrieves image view of black/white bishop sprite.
+     * */
     @Override
     public ImageView getImageView(String color) {
         
@@ -388,7 +424,11 @@ public class Bishop implements Piece {
         }
         return image;
     }
-    
+
+    /**
+     * canPieceMove method checks if movement is valid for a bishop type.
+     * Exceptions are manually handled through program logic.
+     * */
     @Override
     public boolean canPieceMove(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         
@@ -568,7 +608,11 @@ public class Bishop implements Piece {
     public int getBottomRightTiles(int column, int row) {
         return 8 - Math.max(row, column);
     }
-    
+
+    /**
+     * canPieceMoveCheckmateCheck method is specific method that determines if bishop can move to prevent King
+     * checkmate/check scenario.
+     * */
     public boolean canPieceMoveCheckmateCheck(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         
         int xTileOne = xFirstTile - 1;

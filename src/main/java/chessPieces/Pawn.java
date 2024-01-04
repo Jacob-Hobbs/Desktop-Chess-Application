@@ -11,7 +11,10 @@ import javafx.scene.image.ImageView;
  * Pawn class used to instantiate Pawn piece objects for manipulation.
  * */
 public class Pawn implements Piece {
-    
+
+    /**
+     * setCheckDangerTile method used to set corresponding danger boolean for pieces after pawn moves.
+     * */
     public void setCheckDangerTile(Tile[][] tile2DArray, int x, int y, String color) {
         
         if (color.equals("WHITE")) {
@@ -39,6 +42,9 @@ public class Pawn implements Piece {
         }
     }
 
+    /**
+     * getImageView method retrieves image view of black/white pawn sprite.
+     * */
     @Override
     public ImageView getImageView(String color) {
         
@@ -53,6 +59,10 @@ public class Pawn implements Piece {
         return image;
     }
 
+    /**
+     * canPieceMove method checks if movement is valid for a pawn type.
+     * Exceptions are manually handled through program logic.
+     * */
     @Override
     public boolean canPieceMove(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         
@@ -327,7 +337,11 @@ public class Pawn implements Piece {
         //System.out.println("Failed due to: unmet condition.");
         return false;
     }
-    
+
+    /**
+     * canPieceMoveCheckmateCheck method is specific method that determines if pawn can move to prevent King
+     * checkmate/check scenario.
+     * */
     public boolean canPieceMoveCheckmateCheck(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         
         int xTileOne = xFirstTile - 1;

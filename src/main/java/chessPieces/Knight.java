@@ -16,14 +16,20 @@ public class Knight implements Piece {
     private Boolean rightBlackHasMoved;
     private Boolean leftWhiteHasMoved;
     private Boolean rightWhiteHasMoved;
-    
+
+    /**
+     * Knight constructor.
+     * */
     public Knight() {
         this.leftBlackHasMoved = false;
         this.rightBlackHasMoved = false;
         this.leftWhiteHasMoved = false;
         this.rightWhiteHasMoved = false;
     }
-    
+
+    /**
+     * setCheckDangerTile method used to set corresponding danger boolean for pieces after knight moves.
+     * */
     public void setCheckDangerTile(Tile[][] tile2DArray, int x1, int y1, String color) {
 
         if (color.equals("WHITE")) {
@@ -342,38 +348,65 @@ public class Knight implements Piece {
         }
     }
 
+    /**
+     * getLeftBlackHasMoved getter method for left black knight movement.
+     * */
     public Boolean getLeftBlackHasMoved() {
         return this.leftBlackHasMoved;
     }
-    
+
+    /**
+     * setLeftBlackHasMoved setter method for left black knight movement.
+     * */
     public void setLeftBlackHasMoved(Boolean trueOrFalse) {
         this.leftBlackHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getRightBlackHasMoved getter method for right black knight movement.
+     * */
     public Boolean getRightBlackHasMoved() {
         return this.rightBlackHasMoved;
     }
-    
+
+    /**
+     * setRightBlackHasMoved setter method for right black knight movement.
+     * */
     public void setRightBlackHasMoved(Boolean trueOrFalse) {
         this.rightBlackHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getLeftWhiteHasMoved getter method for left white knight movement.
+     * */
     public Boolean getLeftWhiteHasMoved() {
         return this.leftWhiteHasMoved;
     }
-    
+
+    /**
+     * setLeftWhiteHasMoved setter method for left white knight movement.
+     * */
     public void setLeftWhiteHasMoved(Boolean trueOrFalse) {
         this.leftWhiteHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getRightWhiteHasMoved getter method for right white knight movement.
+     * */
     public Boolean getRightWhiteHasMoved() {
         return this.rightWhiteHasMoved;
     }
-    
+
+    /**
+     * setRightWhiteHasMoved setter method for right white knight movement.
+     * */
     public void setRightWhiteHasMoved(Boolean trueOrFalse) {
         this.rightWhiteHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getImageView method retrieves image view of black/white knight sprite.
+     * */
     @Override
     public ImageView getImageView(String color) {
         
@@ -387,7 +420,11 @@ public class Knight implements Piece {
         }
         return image;
     }
-    
+
+    /**
+     * canPieceMove method checks if movement is valid for a knight type.
+     * Exceptions are manually handled through program logic.
+     * */
     @Override
     public boolean canPieceMove(Tile[][] tile2DArray, int x1, int y1, int x2, int y2) {
         
@@ -511,7 +548,10 @@ public class Knight implements Piece {
         //System.out.println("Failed due to: outside knight moveset");
         return false;
     }
-    
+
+    /**
+     * The below methods define the 8 valid moves of a knight type
+     * */
     private int knightMoveOne(int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         
         if (xSecondTile == (xFirstTile - 1) && ySecondTile == (yFirstTile - 2)) {
@@ -575,7 +615,11 @@ public class Knight implements Piece {
         }
         return 0;
     }
-    
+
+    /**
+     * canPieceMoveCheckmateCheck method is specific method that determines if knight can move to prevent King
+     * checkmate/check scenario.
+     * */
     public boolean canPieceMoveCheckmateCheck(Tile[][] tile2DArray, int x1, int y1, int x2, int y2) {
         
         int returnNum = 0;
