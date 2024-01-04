@@ -1,4 +1,6 @@
-
+/**
+ * @author Jacob Hobbs
+ */
 package chessPieces;
 
 import chess.Tile;
@@ -6,9 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- *
- * @author Jacob
- */
+ * Pawn class used to instantiate Pawn piece objects for manipulation.
+ * */
 public class Pawn implements Piece {
     
     public void setCheckDangerTile(Tile[][] tile2DArray, int x, int y, String color) {

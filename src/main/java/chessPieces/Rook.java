@@ -1,4 +1,6 @@
-
+/**
+ * @author Jacob Hobbs
+ */
 package chessPieces;
 
 import chess.Tile;
@@ -7,23 +9,28 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- *
- * @author Jacob
- */
+ * Rook class used to instantiate Rook piece objects for manipulation.
+ * */
 public class Rook implements Piece {
     
     private Boolean leftBlackHasMoved;
     private Boolean rightBlackHasMoved;
     private Boolean leftWhiteHasMoved;
     private Boolean rightWhiteHasMoved;
-    
+
+    /**
+     * Rook constructor.
+     * */
     public Rook() {
         this.leftBlackHasMoved = false;
         this.rightBlackHasMoved = false;
         this.leftWhiteHasMoved = false;
         this.rightWhiteHasMoved = false;
     }
-    
+
+    /**
+     * setCheckDangerTile method used to set corresponding danger boolean for pieces after rook moves.
+     * */
     public void setCheckDangerTile(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, String color) {
         
         if (color.equals("WHITE")) {
@@ -33,7 +40,7 @@ public class Rook implements Piece {
         
             // Creation of list to store diagonal tile considerations
             ArrayList<Integer> tilePairs = new ArrayList<>();
-            // maximum number of tiles a rook can transervse from each direction
+            // maximum number of tiles a rook can transverse from each direction
             int leftMax = getLeftTiles(xFirstTile, yFirstTile);
             int rightMax = getRightTiles(xFirstTile, yFirstTile);
             int upMax = getUpTiles(xFirstTile, yFirstTile);
@@ -334,38 +341,65 @@ public class Rook implements Piece {
         }
     }
 
+    /**
+     * getLeftBlackHasMoved getter method for left black rook movement.
+     * */
     public Boolean getLeftBlackHasMoved() {
         return this.leftBlackHasMoved;
     }
-    
+
+    /**
+     * setLeftBlackHasMoved setter method for left black rook movement.
+     * */
     public void setLeftBlackHasMoved(Boolean trueOrFalse) {
         this.leftBlackHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getRightBlackHasMoved getter method for right black rook movement.
+     * */
     public Boolean getRightBlackHasMoved() {
         return this.rightBlackHasMoved;
     }
-    
+
+    /**
+     * setRightBlackHasMoved setter method for right black rook movement.
+     * */
     public void setRightBlackHasMoved(Boolean trueOrFalse) {
         this.rightBlackHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getLeftWhiteHasMoved getter method for left white rook movement.
+     * */
     public Boolean getLeftWhiteHasMoved() {
         return this.leftWhiteHasMoved;
     }
-    
+
+    /**
+     * setLeftWhiteHasMoved setter method for left white rook movement.
+     * */
     public void setLeftWhiteHasMoved(Boolean trueOrFalse) {
         this.leftWhiteHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * getRightWhiteHasMoved getter method for right white rook movement.
+     * */
     public Boolean getRightWhiteHasMoved() {
         return this.rightWhiteHasMoved;
     }
-    
+
+    /**
+     * setRightWhiteHasMoved setter method for right white rook movement.
+     * */
     public void setRightWhiteHasMoved(Boolean trueOrFalse) {
         this.rightWhiteHasMoved = trueOrFalse;
     }
-    
+
+    /**
+     * checkForMovement method actually tracks rook movement for castling potential.
+     * */
     public void checkForMovement(int x, int y) {
         // if left black rook has moved, note that it has moved
         if (x == 1 && y == 1) {
@@ -384,7 +418,10 @@ public class Rook implements Piece {
             setRightWhiteHasMoved(true);
         }
     }
-    
+
+    /**
+     * getImageView method retrieves image view of black/white rook sprite.
+     * */
     @Override
     public ImageView getImageView(String color) {
         
@@ -398,7 +435,11 @@ public class Rook implements Piece {
         }
         return image;
     }
-    
+
+    /**
+     * canPieceMove method checks if movement is valid for a rook type.
+     * Exceptions are manually handled through program logic.
+     * */
     @Override
     public boolean canPieceMove(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
     
@@ -589,7 +630,11 @@ public class Rook implements Piece {
     public int getRightTiles(int column, int row) {
         return 8 - column;
     }
-    
+
+    /**
+     * canPieceMoveCheckmateCheck method is specific method that determines if rook can move to prevent King
+     * checkmate/check scenario.
+     * */
     public boolean canPieceMoveCheckmateCheck(Tile[][] tile2DArray, int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
     
         int xTileOne = xFirstTile - 1;

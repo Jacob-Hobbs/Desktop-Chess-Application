@@ -1,4 +1,6 @@
-
+/**
+ * @author Jacob Hobbs
+ */
 package chess;
 
 import chessPieces.Bishop;
@@ -21,10 +23,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-
-/**
- * @author Jacob Hobbs
- */
 
 /**
  * Board class defines how the data structure of the chess game is manipulated and how it is
@@ -1412,50 +1410,5 @@ public class Board {
     public void addTileToArray(Tile tile, int x, int y, int pieceID, String color) {
         tile2DArray[x-1][y-1] = tile;    
     }
-    
-    
 
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-
-    
-    
-
-    
 }

@@ -1,9 +1,7 @@
-
-package chess;
-
 /**
- * @author Jacob
+ * @author Jacob Hobbs
  */
+package chess;
 
 /**
  * Player class utilized to instantiate and define player objects.

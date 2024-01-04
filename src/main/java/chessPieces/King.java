@@ -1,4 +1,6 @@
-
+/**
+ * @author Jacob Hobbs
+ */
 package chessPieces;
 
 import chess.Tile;
@@ -7,9 +9,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- *
- * @author Jacob
- */
+ * King class used to instantiate King piece objects for manipulation.
+ * */
 public class King implements Piece {
     
     private Boolean whiteKingInCheck;

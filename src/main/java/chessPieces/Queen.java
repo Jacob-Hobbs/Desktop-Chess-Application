@@ -1,4 +1,6 @@
-
+/**
+ * @author Jacob Hobbs
+ */
 package chessPieces;
 
 import chess.Tile;
@@ -6,9 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- *
- * @author Jacob
- */
+ * Queen class used to instantiate Queen piece objects for manipulation.
+ * */
 public class Queen implements Piece {
     private Bishop bishop;
     private Rook rook;

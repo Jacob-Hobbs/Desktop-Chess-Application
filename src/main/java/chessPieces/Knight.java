@@ -1,4 +1,6 @@
-
+/**
+ * @author Jacob Hobbs
+ */
 package chessPieces;
 
 import chess.Tile;
@@ -6,9 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- *
- * @author Jacob
- */
+ * Knight class used to instantiate Knight piece objects for manipulation.
+ * */
 public class Knight implements Piece {
     
     private Boolean leftBlackHasMoved;
