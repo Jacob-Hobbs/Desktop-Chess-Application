@@ -23,12 +23,15 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 /**
- *
- * @author Jacob
+ * @author Jacob Hobbs
  */
+
+/**
+ * Board class defines how the data structure of the chess game is manipulated and how it is
+ * visually presented.
+ * */
 public class Board {
-    
-    private Button button;
+
     private int rows;
     private int columns;
     private Pawn pawn;
@@ -41,7 +44,6 @@ public class Board {
     private GridPane chessBoard;
     private ArrayList<Integer> tileList;
     private Label playerLabel;
-    private int storedPieceID;
     private Button queenButton;
     private Button rookButton;
     private Button bishopButton;
@@ -49,9 +51,11 @@ public class Board {
     private int enPassantCount;
     private Player player;
     private Boolean promotionActive;
-    private int winCondition;
     
-    
+    /**
+     * Board constructor.
+     * Defines default attribute values upon Board instantiation.
+     * */
     public Board() {
         this.rows = 8;
         this.columns = 8;
@@ -72,22 +76,17 @@ public class Board {
         this.enPassantCount = 0;
         this.player = new Player();
         this.promotionActive = Boolean.FALSE;
-        this.winCondition = 0;
         
     }
-    
-    
+
+    /**
+     * startGame method presents initial visual board details at runtime. This includes
+     * a blank board with no chess pieces and the option to begin a new game.
+     * */
     public void startGame(Stage stage) {
 
-        /**
-         GridPane chessBoard creation and styling.
-         * You can style the chessBoard here. 
-         * Tile objects, drawn from the tile2DArray will populate the chessBoard
-         */
-        //GridPane chessBoard = new GridPane(); 
         chessBoard.setStyle(" -fx-background-color: #fefefe; -fx-border-color: black; -fx-border-width: 3 ; "
                 + "-fx-background-insets: 0; -fx-background-radius:0;");
-        //chessBoard.setAlignment(Pos.CENTER);
         
         Button resetButton = new Button("Start Game");
         resetButton.setFont(Font.font("Cooper Black", 14));
@@ -136,12 +135,7 @@ public class Board {
             king.setCheckStatus(false, "BLACK");
             king.setCheckStatus(false, "WHITE");
         });
-        
-        
-        
-        
-       
-        
+
         BorderPane borderPane = new BorderPane();
         borderPane.setTop(gameMenu);
         borderPane.setBottom(chessBoard);
@@ -153,7 +147,10 @@ public class Board {
         stage.show();
        
     }
-    
+
+    /**
+     * setPromotionButtons method sets each promotion button with its respective chess piece image.
+     * */
     public void setPromotionButtons(Button queenButton, Button rookButton, Button bishopButton, Button knightButton) {
         queenButton.setMinSize(40, 40);
         queenButton.setMaxSize(40, 40);
@@ -192,7 +189,13 @@ public class Board {
         knightButton.setDisable(true);
     }
 
-    // updating to take paramter as to which 2d array it uses to 
+    /**
+     * initializeUpdatedBoard method is utilized at the end of each turn. The visual grid of buttons
+     * presented in the JavaFX window is cleared, the two-dimensional array is updated to reflect a
+     * player's move, and then each updated tile object is placed back into the grid.
+     *
+     * Check and checkmate conditions are assessed. Checkmate locks up move selection.
+     * */
     public void initializeUpdatedBoard() {
         chessBoard.getChildren().clear();
         int colorCount = 0;
@@ -216,6 +219,7 @@ public class Board {
                 tile2DArray[x-1][y-1].setCheckDangerBlack(Boolean.FALSE);
             }
         }
+
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
                 
@@ -233,20 +237,15 @@ public class Board {
                 } else if (tile2DArray[x-1][y-1].getPieceID() == 6) {
                     king.setCheckDangerTile(tile2DArray, x, y, tile2DArray[x-1][y-1].getPieceColor());
                 }
-                
-                
-   
+
             }
         }
-        
-        
+
         // For every tile on the board...
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
                 
                 if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getPieceColor() == "WHITE") {
-                    
-                    //System.out.println("Tile: (" + x + ", " + y + ") checkDangerBlack = " + this.tile2DArray[x-1][y-1].getCheckDangerBlack());
                     
                     if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getCheckDangerBlack() == true) {
                         
@@ -288,7 +287,8 @@ public class Board {
                                 }   
             
                         }
-                    }  
+                    }
+
                 } else if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getPieceColor() == "BLACK") {
                     
                     if (this.tile2DArray[x-1][y-1].getPieceID() == 6 && this.tile2DArray[x-1][y-1].getCheckDangerWhite() == Boolean.TRUE) {
@@ -330,8 +330,7 @@ public class Board {
                                     for (int y1 = 1; y1 <= 8; y1++) {
                                         this.tile2DArray[x1-1][y1-1].getTileButton().setDisable(true);
                                     }
-                                }   
-            
+                                }
                         }
                     } 
                     
@@ -340,7 +339,13 @@ public class Board {
         } 
         
     }
-    
+
+    /**
+     * checkForCheckmate method assesses for checkmate of next player.
+     *
+     * In order to save on execution time, only tiles containing the parameterized players' pieces
+     * have their danger values assessed. If a players pieces cannot move and the king is in check, checkmate occurs.
+     * */
     public void checkForCheckmate(String playerColor) {
         
         // used to hold number of pieces that player currently has on board
@@ -396,8 +401,6 @@ public class Board {
                                     setTileGraphic(tile2DArray[x-1][y-1]);
                                     setTileGraphic(tile2DArray[i-1][j-1]);
 
-                                    //System.out.println(tile2DArray[x-1][y-1].getPieceID() + " can move at: ");
-                                    //System.out.println("canMoveTileCoords: " + x + ", " + y + ", " + i + ", " + j); 
                                     canMoveTiles++;
 
                                 }
@@ -423,10 +426,7 @@ public class Board {
                             }    
                         }
                     }
-                    
-                    
                 }
-                
             }
         }
         
@@ -437,9 +437,11 @@ public class Board {
         } else {
             // do nothing
         }
-
     }
 
+    /**
+     * convertLayoutX method used to convert pixel x-position to grid place.
+     * */
     public int convertLayoutX(int x) {
         if (x == 3) {
             return 1;
@@ -459,7 +461,10 @@ public class Board {
             return 8;
         }
     }
-    
+
+    /**
+     * convertLayoutY method used to convert pixel y-position to grid place.
+     * */
     public int convertLayoutY(int y) {
         if (y == 3) {
             return 1;
@@ -479,7 +484,11 @@ public class Board {
             return 8;
         }
     }
-    
+
+    /**
+     * setButtonStyle intakes each grid button and sets its style and tile information.
+     * This includes position, chess piece image, and danger/en passant signals.
+     * */
     public void setButtonStyle(Button boardButton, int colorCount, int x) {
         
         boardButton.setOnMouseClicked((event) -> {
@@ -766,7 +775,12 @@ public class Board {
             });
         }   
     }
-    
+
+    /**
+     * getPromotionBoard method intakes position of pawn being promoted and then responds to
+     * player selection of piece to replace pawn. This method contains event definitions for
+     * each promotion button and handles them.
+     * */
     public void getPromotionBoard(int xTile, int yTile) {
         
         // Store color of pawn being promoted.
@@ -1013,11 +1027,14 @@ public class Board {
             this.promotionActive = Boolean.FALSE;
  
         });
-        
         initializeUpdatedBoard();
-        
     }
-    
+
+    /**
+     * pieceCanMoveCheckmateCheckMaster method utilizes canPieceMoveCheckMateCheck for each individual
+     * piece type. There must be an individual move analysis method for each piece type as each type has
+     * its unique moveset.
+     * */
     public boolean pieceCanMoveCheckmateCheckMaster(int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         // This method will determine if a piece can move. If can return true, if cannot return false.
         String firstColor = this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor();
@@ -1027,8 +1044,6 @@ public class Board {
         int yTileOne = yFirstTile - 1;
         int xTileTwo = xSecondTile - 1;
         int yTileTwo = ySecondTile - 1;
-        
-        //Boolean returnBoolean = Boolean.FALSE;
         
         // if second tile contains a king, return false;
         if (tile2DArray[xTileTwo][yTileTwo].getPieceID() == 6) {
@@ -1083,22 +1098,26 @@ public class Board {
                 return false;
             }
         }
-        //System.out.println("Failed due to: pieces are the same color!");
         return false;
     }
 
+    /**
+     * pieceCanMove is the most atomized of the three move methods. This method determines in
+     * granularity if a piece can move depending on its type.
+     *
+     * While canPieceMoveCheckmateCheck and canPieceMoveCheckmateCheckMaster works as a pair when
+     * check and checkmate conditions are being assessed, pieceCanMove is used for every piece movement
+     * attempt as a baseline before considering more time-consuming methods.
+     * */
     public boolean pieceCanMove(int xFirstTile, int yFirstTile, int xSecondTile, int ySecondTile) {
         // This method will determine if a piece can move. If can return true, if cannot return false.
         String firstColor = this.tile2DArray[xFirstTile-1][yFirstTile-1].getPieceColor();
         String secondColor = this.tile2DArray[xSecondTile-1][ySecondTile-1].getPieceColor();
-        
-        
+
         int xTileOne = xFirstTile - 1;
         int yTileOne = yFirstTile - 1;
         int xTileTwo = xSecondTile - 1;
         int yTileTwo = ySecondTile - 1;
-        
-        //Boolean returnBoolean = Boolean.FALSE;
         
         // if second tile contains a king, return false;
         if (tile2DArray[xTileTwo][yTileTwo].getPieceID() == 6) {
@@ -1155,7 +1174,10 @@ public class Board {
         //System.out.println("Failed due to: pieces are the same color!");
         return false;
     }
-    
+
+    /**
+     * initializeBlankBoard is used to initialize the blank grid of buttons when a new game starts.
+     * */
     public void initializeBlankBoard(GridPane chessBoard) {
         int colorCount = 0;
         for (int x = 1; x <= 8; x++) {
@@ -1173,7 +1195,11 @@ public class Board {
             }
         } 
     }
-    
+
+    /**
+     * initializeStartingBoard method is used to initialize the grid of buttons with default tiles for
+     * a new game. Visually, default tiles will contain the starting positions the chess pieces.
+     * */
     public void initializeStartingBoard(GridPane chessBoard) {
         
         chessBoard.getChildren().clear();
@@ -1225,7 +1251,11 @@ public class Board {
         king.setBlackKingHasMoved(false);
         king.setWhiteKingHasMoved(false);
     }
-    
+
+    /**
+     * The getTileGraphic method is used to retrieve the correct chess sprite for
+     * each tile according to assigned pieceID.
+     * */
     private ImageView getTileGraphic(Tile tile) {
         int pieceID = tile.getPieceID();
         String pieceColor = tile.getPieceColor();
@@ -1275,7 +1305,11 @@ public class Board {
         }
         return image;
     }
-    
+
+    /**
+     * The setTileGraphic method is used to set the correct chess sprite for
+     * each tile according to assigned pieceID.
+     * */
     private void setTileGraphic(Tile tile) {
         int pieceID = tile.getPieceID();
         String pieceColor = tile.getPieceColor();
@@ -1326,7 +1360,10 @@ public class Board {
         }
 
     }
-    
+
+    /**
+     * The assignPieceColor method is used to set default piece colors for starting tiles.
+     * */
     public String assignPieceColor(int x, int y) {
         String pieceColor = "NONE";
         if (y == 2 || y == 7) {
@@ -1343,7 +1380,10 @@ public class Board {
         } 
         return pieceColor;
     }
-    
+
+    /**
+     * The assignPieceID method is used to set default piece ids for starting tiles.
+     * */
     public int assignPieceID(int x, int y) {
         
         int pieceID = 0;
@@ -1365,7 +1405,10 @@ public class Board {
         } 
         return pieceID;
     }
-    
+
+    /**
+     * The addTileToArray method is used to add tiles to the two-dimensional array.
+     * */
     public void addTileToArray(Tile tile, int x, int y, int pieceID, String color) {
         tile2DArray[x-1][y-1] = tile;    
     }
